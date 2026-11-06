@@ -1,22 +1,9 @@
-import { useEffect } from "react";
 import Section from "./Section";
 import SectionHeading from "./SectionHeading";
 import { faq } from "@/data/faq";
 
+// Structured data FAQPage di-generate saat build dari data yang sama (lihat vite.config.ts).
 export default function Faq() {
-  // Structured data dari data yang sama dengan yang tampil di halaman.
-  useEffect(() => {
-    const el = document.createElement("script");
-    el.type = "application/ld+json";
-    el.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-    });
-    document.head.appendChild(el);
-    return () => { el.remove(); };
-  }, []);
-
   return (
     <Section id="faq">
       <SectionHeading index="07" eyebrow="FAQ" title="Questions" />

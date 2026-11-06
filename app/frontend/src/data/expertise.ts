@@ -1,4 +1,7 @@
-export const expertise = [
+export type IconName = "Hexagon" | "Network" | "Users" | "Code2" | "Bot" | "FileText";
+export type ExpertiseItem = { icon: IconName; name: string; level: string };
+
+export const expertise: ExpertiseItem[] = [
   {
     icon: "Hexagon",
     name: "Web3 Research",

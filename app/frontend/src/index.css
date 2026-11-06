@@ -8,7 +8,7 @@
   --accent-rgb: 244 244 244;
   --fg-rgb: 244 244 244;
   --muted-rgb: 168 168 168;
-  --subtle-rgb: 120 120 120;
+  --subtle-rgb: 135 135 135;
   --line-rgb: 255 255 255;
 
   --bg: rgb(var(--bg-rgb));
@@ -23,7 +23,7 @@ html[data-theme="light"] {
   --accent-rgb: 8 8 8;
   --fg-rgb: 10 10 10;
   --muted-rgb: 88 88 88;
-  --subtle-rgb: 128 128 128;
+  --subtle-rgb: 100 100 100;
   --line-rgb: 10 10 10;
   color-scheme: light;
 }

@@ -1,9 +1,9 @@
 import Section from "./Section";
 import SectionHeading from "./SectionHeading";
-import { Hexagon, Network, Users, Code2, Bot, FileText } from "lucide-react";
-import { expertise } from "@/data/expertise";
+import { Hexagon, Network, Users, Code2, Bot, FileText, type LucideIcon } from "lucide-react";
+import { expertise, type IconName } from "@/data/expertise";
 
-const icons = { Hexagon, Network, Users, Code2, Bot, FileText };
+const icons: Record<IconName, LucideIcon> = { Hexagon, Network, Users, Code2, Bot, FileText };
 
 export default function Expertise() {
   return (
@@ -17,7 +17,7 @@ export default function Expertise() {
 
       <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {expertise.map((e, i) => {
-          const Icon = icons[e.icon as keyof typeof icons];
+          const Icon = icons[e.icon];
           return (
             <li key={e.name} data-reveal>
               <div className="group h-full rounded-2xl border border-line bg-card p-6 transition-colors hover:border-accent/40">

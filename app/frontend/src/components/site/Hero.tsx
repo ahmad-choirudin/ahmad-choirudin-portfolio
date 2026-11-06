@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { site } from "@/data/site";
 import NetworkBackground from "./NetworkBackground";
 import ParticlePhoto from "./ParticlePhoto";
@@ -13,6 +13,13 @@ const lines = [
 
 export default function Hero() {
   const [done, setDone] = useState(false);
+  const handleDone = useCallback(() => setDone(true), []);
+
+  // Jaring pengaman: foto asli selalu muncul meski animasi partikel gagal.
+  useEffect(() => {
+    const t = window.setTimeout(() => setDone(true), 5000);
+    return () => window.clearTimeout(t);
+  }, []);
 
   return (
     <section className="relative isolate flex min-h-[88svh] items-center overflow-hidden pt-16">
@@ -38,7 +45,7 @@ export default function Hero() {
           />
           <ParticlePhoto
             src={site.heroImage}
-            onDone={() => setDone(true)}
+            onDone={handleDone}
             className={`pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-700 ${
               done ? "opacity-0" : "opacity-70 md:opacity-100"
             }`}

@@ -1,7 +1,4 @@
-const tools = [
-  "React", "Vite", "Tailwind CSS", "TypeScript", "JavaScript", "Python",
-  "Solidity", "Foundry", "Rust", "Cairo", "Avalanche", "BNB Chain", "Starknet", "Solana",
-];
+import { tools } from "@/data/tools";
 
 export default function Marquee() {
   const row = (hidden: boolean) => (
@@ -16,6 +13,7 @@ export default function Marquee() {
   );
   return (
     <div
+      role="group"
       className="marquee overflow-hidden border-y border-line py-5 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
       aria-label="Tools and ecosystems I work with"
     >

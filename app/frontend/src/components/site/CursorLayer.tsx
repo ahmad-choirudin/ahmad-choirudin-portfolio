@@ -24,6 +24,7 @@ export default function CursorLayer() {
 
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return () => io.disconnect();
 
+    const hero = document.querySelector<HTMLElement>(".hero-photo");
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
@@ -32,7 +33,7 @@ export default function CursorLayer() {
         const y = scrollY;
         const h = document.documentElement.scrollHeight - innerHeight;
         if (bar.current) bar.current.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
-        if (y < 900) document.documentElement.style.setProperty("--py", `${y * 0.12}px`);
+        if (hero && y < 900) hero.style.setProperty("--py", `${y * 0.12}px`);
         ticking = false;
       });
     };

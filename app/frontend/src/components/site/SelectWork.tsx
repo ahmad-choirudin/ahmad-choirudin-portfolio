@@ -1,22 +1,44 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Section from "./Section";
 import SectionHeading from "./SectionHeading";
 import { projects } from "@/data/projects";
 
 type Project = (typeof projects)[number];
 
-const categoryOf = (p: Project) => p.period.split("·")[0].trim();
+// Filter dan pencarian baru berguna kalau proyeknya sudah cukup banyak.
+const FILTER_MIN = 4;
+
+const categoryOf = (p: Project) => p.category;
 const toolsOf = (p: Project) => p.tools.split(",").map((t) => t.trim());
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const closeBtn = useRef<HTMLButtonElement>(null);
+  const dialog = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
     const opener = document.activeElement as HTMLElement | null;
     document.body.style.overflow = "hidden";
     closeBtn.current?.focus();
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      // Jaga fokus tetap di dalam dialog.
+      const nodes = dialog.current?.querySelectorAll<HTMLElement>("a[href], button");
+      if (!nodes || nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prevOverflow;
@@ -31,6 +53,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       onClick={onClose}
     >
       <div
+        ref={dialog}
         role="dialog"
         aria-modal="true"
         aria-label={project.title}
@@ -91,6 +114,8 @@ export default function SelectedWork() {
   }, [category, query]);
 
   const reset = () => { setCategory("All"); setQuery(""); };
+  const close = useCallback(() => setActive(null), []);
+  const showControls = projects.length >= FILTER_MIN;
 
   return (
     <Section id="work">
@@ -101,6 +126,7 @@ export default function SelectedWork() {
         note="Selected projects across Web3 research, frontend development, and digital products."
       />
 
+      {showControls && (
       <div className="mt-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
           {categories.map((c) => (
@@ -127,7 +153,9 @@ export default function SelectedWork() {
         />
       </div>
 
-      <p className="sr-only" role="status">{visible.length} projects shown</p>
+      )}
+
+      {showControls && <p className="sr-only" role="status">{visible.length} projects shown</p>}
 
       {visible.length === 0 ? (
         <div className="mt-16 rounded-2xl border border-line p-10 text-center">
@@ -196,7 +224,7 @@ export default function SelectedWork() {
         </div>
       )}
 
-      {active && <ProjectModal project={active} onClose={() => setActive(null)} />}
+      {active && <ProjectModal project={active} onClose={close} />}
     </Section>
   );
 }

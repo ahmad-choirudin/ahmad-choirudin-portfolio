@@ -23,6 +23,9 @@ export default function ParticlePhoto({
   className = "",
 }: ParticlePhotoProps) {
   const ref = useRef<HTMLCanvasElement>(null);
+  // Callback disimpan di ref supaya effect tidak diulang saat parent re-render.
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     const cv = ref.current;
@@ -32,7 +35,7 @@ export default function ParticlePhoto({
     if (!ctx) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      onDone();
+      onDoneRef.current();
       return;
     }
 
@@ -42,6 +45,10 @@ export default function ParticlePhoto({
     let dead = false;
 
     const img = new Image();
+    // Jika gambar gagal dimuat, tetap lepas foto asli supaya hero tidak kosong.
+    img.onerror = () => {
+      if (!dead) onDoneRef.current();
+    };
     img.src = src;
 
     img.onload = () => {
@@ -147,7 +154,7 @@ export default function ParticlePhoto({
 
         if (!doneAt && ((t > 800 && !moving) || t > 3500)) {
           doneAt = t;
-          onDone();
+          onDoneRef.current();
         }
 
         if (doneAt && t > doneAt + 900) {
@@ -162,8 +169,9 @@ export default function ParticlePhoto({
       dead = true;
       cancelAnimationFrame(raf);
       img.onload = null;
+      img.onerror = null;
     };
-  }, [src, onDone]);
+  }, [src]);
 
   return (
     <canvas

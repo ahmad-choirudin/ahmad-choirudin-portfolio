@@ -2,7 +2,6 @@ export const site = {
   name: "Ahmad Choirudin",
   role: "Independent Digital Professional · Indonesia",
   heroImage: "/hero.webp",
-  aboutImage: "/about.webp",
   email: "ahmadchoirudin86@gmail.com",
   // Nomor WhatsApp format internasional tanpa + (contoh: "628123456789").
   // Kosong = form kontak membuka aplikasi email.

@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
 
 const COLUMNS = 7;
-const COVER_MS = 1100;
-const REVEAL_MS = 800;
+const COVER_MS = 800;
+const REVEAL_MS = 780;
 
 type Phase = "idle" | "cover" | "reveal";
 

@@ -2,6 +2,7 @@ export const projects = [
   {
     image: "/projects/cubbie-nft-marketplace.webp",
     title: "CUBBIE NFT Marketplace",
+    category: "Marketplace",
     period: "NFT Marketplace · Frontend",
     text: "A bold exploration of digital ownership and collectible culture. CUBBIE NFT Marketplace pairs distinctive visual identity with a refined marketplace experience, bringing digital collectibles into a clean, modern Web3 environment.",
     tools: "React, TypeScript, Tailwind CSS",
@@ -11,6 +12,7 @@ export const projects = [
   {
     image: "/projects/web3-research-os.webp",
     title: "CUBBIE Web3 Research OS",
+    category: "Dashboard",
     period: "Web3 Analytics · Research Dashboard",
     text: "A unified command center for exploring the crypto ecosystem. Track live market data, analyze price movements, discover DeFi protocol insights, follow crypto news, monitor wallet balances, and manage research workflows all in one purpose-built Web3 workspace.",
     tools: "React, Vite, TypeScript, Tailwind CSS, CoinGecko, DefiLlama",
@@ -20,6 +22,7 @@ export const projects = [
   {
     image: "/projects/airdrop-tracker.webp",
     title: "CUBBIE Airdrop Tracker",
+    category: "Dashboard",
     period: "Web3 Tracker · Dashboard",
     text: "A clean and simple web3 dashboard that helps you track, manage, and stay updated on airdrop opportunities across multiple projects, all in one place.",
     tools: "React, Vite, Tailwind CSS, Lucide React, Python",

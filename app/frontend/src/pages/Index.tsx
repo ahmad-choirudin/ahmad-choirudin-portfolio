@@ -25,7 +25,7 @@ export default function Index() {
       <PageTransition />
       <CursorLayer />
       <SiteNav />
-      <main id="main">
+      <main id="main" tabIndex={-1} className="focus:outline-none">
         <Hero />
         <Marquee />
         <SelectWork />

@@ -4,6 +4,11 @@ import { site } from "@/data/site";
 
 type Fields = { name: string; email: string; message: string };
 type Errors = Partial<Record<keyof Fields, string>>;
+type Status = "idle" | "sending" | "sent" | "error";
+
+// Isi VITE_CONTACT_ENDPOINT (mis. https://formspree.io/f/xxxx) agar pesan terkirim langsung.
+// Kosong = fallback ke WhatsApp (jika site.whatsapp diisi) atau aplikasi email.
+const ENDPOINT = (import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined)?.trim() || "";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -21,30 +26,64 @@ const inputCls =
 export default function Contact() {
   const [values, setValues] = useState<Fields>({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Errors>({});
-  const [sent, setSent] = useState(false);
-  const viaWhatsApp = Boolean(site.whatsapp);
+  const [status, setStatus] = useState<Status>("idle");
+  const viaEndpoint = Boolean(ENDPOINT);
+  const viaWhatsApp = !viaEndpoint && Boolean(site.whatsapp);
 
   const set = (k: keyof Fields) => (e: { target: { value: string } }) => {
     setValues((v) => ({ ...v, [k]: e.target.value }));
     if (errors[k]) setErrors((er) => ({ ...er, [k]: undefined }));
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Honeypot: kolom tersembunyi yang hanya diisi bot.
-    if ((new FormData(e.currentTarget).get("website") as string)?.length) { setSent(true); return; }
+    const trap = new FormData(e.currentTarget).get("website");
+    if (typeof trap === "string" && trap.length) { setStatus("sent"); return; }
 
     const found = validate(values);
     setErrors(found);
     if (Object.keys(found).length) return;
 
-    const text = `Hi Ahmad,\n\n${values.message.trim()}\n\n— ${values.name.trim()} (${values.email.trim()})`;
-    const url = viaWhatsApp
-      ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`
-      : `mailto:${site.email}?subject=${encodeURIComponent(`Hello from ${values.name.trim()}`)}&body=${encodeURIComponent(text)}`;
-    if (viaWhatsApp) window.open(url, "_blank", "noopener,noreferrer");
-    else window.location.href = url;
-    setSent(true);
+    const name = values.name.trim();
+    const email = values.email.trim();
+    const message = values.message.trim();
+
+    if (viaEndpoint) {
+      setStatus("sending");
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ name, email, message }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        setValues({ name: "", email: "", message: "" });
+        setStatus("sent");
+      } catch {
+        setStatus("error");
+      }
+      return;
+    }
+
+    const text = `Hi Ahmad,\n\n${message}\n\n— ${name} (${email})`;
+    if (viaWhatsApp) {
+      window.open(`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`Hello from ${name}`)}&body=${encodeURIComponent(text)}`;
+    }
+    setStatus("sent");
+  };
+
+  const statusText: Record<Status, string> = {
+    idle: "",
+    sending: "Sending…",
+    sent: viaEndpoint
+      ? "Thanks! Your message has been sent."
+      : viaWhatsApp
+        ? "Opening WhatsApp with your message…"
+        : `Opening your email app… If nothing opens, write to ${site.email}.`,
+    error: `Couldn’t send your message. Please try again or email ${site.email}.`,
   };
 
   const err = (k: keyof Fields) => (errors[k] ? { "aria-invalid": true, "aria-describedby": `${k}-error` } : {});
@@ -86,13 +125,14 @@ export default function Contact() {
 
           <button
             type="submit"
-            className="group mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-4 text-sm font-medium text-bg transition hover:-translate-y-0.5"
+            disabled={status === "sending"}
+            className="group mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-4 text-sm font-medium text-bg transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
           >
-            {viaWhatsApp ? "Send via WhatsApp" : "Send message"}
+            {status === "sending" ? "Sending…" : viaWhatsApp ? "Send via WhatsApp" : "Send message"}
             <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
           </button>
-          <p role="status" className="mt-4 text-sm text-muted">
-            {sent ? (viaWhatsApp ? "Opening WhatsApp with your message…" : "Opening your email app with your message…") : ""}
+          <p role="status" className={`mt-4 text-sm ${status === "error" ? "text-red-400" : "text-muted"}`}>
+            {statusText[status]}
           </p>
         </form>
       </div>

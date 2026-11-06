@@ -1,8 +1,8 @@
 # ◈ Ahmad Choirudin — Portfolio
 
 <p align="center">
-  <img src="https://img.shields.io/badge/PORTFOLIO-AHMAD_CHOIRUDIN-8DF25B?style=for-the-badge&labelColor=0A0A0A" alt="Portfolio" />
-  <img src="https://img.shields.io/badge/STATUS-LIVE-8DF25B?style=for-the-badge&labelColor=0A0A0A" alt="Live" />
+  <img src="https://img.shields.io/badge/PORTFOLIO-AHMAD_CHOIRUDIN-F4F4F4?style=for-the-badge&labelColor=0A0A0A" alt="Portfolio" />
+  <img src="https://img.shields.io/badge/STATUS-LIVE-F4F4F4?style=for-the-badge&labelColor=0A0A0A" alt="Live" />
   <img src="https://img.shields.io/badge/BUILT_WITH-REACT_+_TYPESCRIPT-61DAFB?style=for-the-badge&labelColor=0A0A0A" alt="React and TypeScript" />
 </p>
 
@@ -26,11 +26,11 @@
   <tr>
     <td width="50%">
       <strong>01 / DESIGN SYSTEM</strong><br />
-      Dark theme with a single neon green accent. Colors, type scale, and spacing are defined once as design tokens.
+      Monochrome theme with dark and light modes and a single accent token. Colors, type scale, and spacing are defined once as design tokens.
     </td>
     <td width="50%">
       <strong>02 / SECTIONS</strong><br />
-      Hero, Selected Work, About, Experience, Expertise, Certificates, and Contact.
+      Hero, Selected Work, About, Experience, Expertise, Certificates, Process, FAQ, and Contact.
     </td>
   </tr>
   <tr>
@@ -131,17 +131,33 @@ app/frontend/
 | What to change | File |
 | --- | --- |
 | Name, role, social links, nav items | `src/data/site.ts` |
-| Contact email (stored split to deter scrapers) | `src/data/site.ts` → `emailUser`, `emailDomain` |
-| Hero and About photos | `src/data/site.ts` + `public/` |
+| Contact email | `src/data/site.ts` → `email` |
+| Contact form delivery | `.env` → `VITE_CONTACT_ENDPOINT` (see Contact form) |
+| Hero photo | `src/data/site.ts` + `public/` |
+| About portrait | `public/about.webp`, then run `python scripts/gen-portrait.py` |
 | Projects | `src/data/projects.ts` |
 | Work experience | `src/data/experience.ts` |
 | Expertise | `src/data/expertise.ts` |
+| Marquee tools | `src/data/tools.ts` |
+| Process steps | `src/data/process.ts` |
+| FAQ (also injected as JSON-LD at build) | `src/data/faq.ts` |
 | Certificates | `src/data/certificate.ts` |
 | Colors | `src/index.css` (`:root` tokens) |
 | Fonts and type scale | `tailwind.config.ts` + font link in `index.html` |
 | Animations | `src/index.css`, `src/animations.css` |
 
 Navigation items in `site.ts` must match section ids (lowercase): `work`, `about`, `experience`, `expertise`, `credentials`, `contact`.
+
+## ◈ CONTACT FORM
+
+By default the form opens the visitor's email app (or WhatsApp if `site.whatsapp` is set). To deliver messages directly, create a form at [Formspree](https://formspree.io) (or any service that accepts a JSON POST) and set its URL:
+
+```bash
+cp .env.example .env
+# VITE_CONTACT_ENDPOINT=https://formspree.io/f/xxxxxxxx
+```
+
+On Vercel, add the same variable under **Settings → Environment Variables** and redeploy.
 
 ## ◈ DEPLOYMENT
 
