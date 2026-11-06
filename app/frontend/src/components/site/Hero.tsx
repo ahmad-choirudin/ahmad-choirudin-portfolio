@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { site } from "@/data/site";
 import NetworkBackground from "./NetworkBackground";
+import ParticlePhoto from "./ParticlePhoto";
 import { Container } from "./Section";
 
 const lines = [
@@ -10,6 +12,8 @@ const lines = [
 ];
 
 export default function Hero() {
+  const [done, setDone] = useState(false);
+
   return (
     <section className="relative isolate flex min-h-[88svh] items-center overflow-hidden pt-16">
       <NetworkBackground />
@@ -20,9 +24,26 @@ export default function Hero() {
         className="pointer-events-none absolute -right-24 top-1/4 -z-10 h-[28rem] w-[28rem] rounded-full bg-accent/10 blur-3xl"
       />
 
-      {/* Foto */}
+      {/* Foto: partikel berkumpul, lalu crossfade ke foto asli */}
       <div className="absolute inset-y-0 right-0 w-full md:w-1/2 md:pt-16">
-        <img src={site.heroImage} alt="Ahmad Choirudin" width={1024} height={1280} className="hero-photo h-full w-full object-cover object-[center_20%] opacity-70 md:opacity-100" />
+        <div className="hero-photo relative h-full w-full">
+          <img
+            src={site.heroImage}
+            alt="Ahmad Choirudin"
+            width={1024}
+            height={1280}
+            className={`h-full w-full object-cover object-[center_20%] transition-opacity duration-700 ${
+              done ? "opacity-70 md:opacity-100" : "opacity-0"
+            }`}
+          />
+          <ParticlePhoto
+            src={site.heroImage}
+            onDone={() => setDone(true)}
+            className={`pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-700 ${
+              done ? "opacity-0" : "opacity-70 md:opacity-100"
+            }`}
+          />
+        </div>
         {/* HP: gelap merata supaya teks terbaca */}
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-bg/30 md:hidden" />
         {/* Desktop: pudar tipis ke kiri */}
