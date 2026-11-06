@@ -11,3 +11,82 @@
 
   .magnetic-inner { transition: transform .25s ease-out; will-change: transform; }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes pop { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes sheet { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: none; } }
+  .pop-in { animation: pop .5s ease both; }
+  .sheet-in { animation: sheet .3s cubic-bezier(.2,.8,.2,1) both; }
+}
+
+
+/* Curtain page transition */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  pointer-events: none;
+  visibility: hidden;
+}
+.page-curtain__panel {
+  display: block;
+  background: rgb(var(--bg-rgb, 8 8 8));
+  transform: scaleY(0);
+  transform-origin: top;
+}
+.page-curtain.is-cover,
+.page-curtain.is-reveal { visibility: visible; }
+.page-curtain.is-cover .page-curtain__panel {
+  animation: curtain-cover 850ms cubic-bezier(.76, 0, .24, 1) both;
+  animation-delay: calc(var(--panel) * 45ms);
+}
+.page-curtain.is-reveal .page-curtain__panel {
+  transform: scaleY(1);
+  transform-origin: bottom;
+  animation: curtain-reveal 800ms cubic-bezier(.76, 0, .24, 1) both;
+  animation-delay: calc((6 - var(--panel)) * 42ms);
+}
+.page-curtain__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  text-align: center;
+  color: rgb(var(--fg-rgb, 244 244 244));
+  opacity: 0;
+}
+.page-curtain__name {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: clamp(2.5rem, 11vw, 6rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.page-curtain.is-cover .page-curtain__label {
+  animation: curtain-label-in 500ms cubic-bezier(.2, .8, .2, 1) 450ms both;
+}
+.page-curtain.is-reveal .page-curtain__label {
+  opacity: 1;
+  animation: curtain-label-out 350ms ease both;
+}
+@keyframes curtain-label-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes curtain-label-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(-12px); }
+}
+@keyframes curtain-cover { to { transform: scaleY(1); } }
+@keyframes curtain-reveal { to { transform: scaleY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .page-curtain { display: none; }
+}

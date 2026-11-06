@@ -50,7 +50,7 @@ export default function Timeline() {
         </div>
 
         <ol ref={list} className="relative md:col-span-8">
-          <span className="absolute bottom-1 left-[7px] top-1 w-px bg-white/10" aria-hidden="true" />
+          <span className="absolute bottom-1 left-[7px] top-1 w-px bg-fg/10" aria-hidden="true" />
           <span className="tl-line absolute bottom-1 left-[7px] top-1 w-px bg-accent" aria-hidden="true" />
           {experience.map((it) => (
             <li key={it.title} className="tl-item relative pb-12 pl-10 last:pb-0">

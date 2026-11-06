@@ -11,7 +11,7 @@ export default {
         fg: token("fg"),
         muted: token("muted"),
         subtle: token("subtle"),
-        line: "rgb(255 255 255 / 0.1)",
+        line: "rgb(var(--line-rgb) / 0.1)",
       },
       fontFamily: {
         sans: ['"Inter"', "system-ui", "sans-serif"],

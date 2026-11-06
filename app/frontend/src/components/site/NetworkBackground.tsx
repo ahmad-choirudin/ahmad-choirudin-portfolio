@@ -10,7 +10,10 @@ export default function NetworkBackground() {
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const color = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#8df25b";
+    const readColor = () => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#f4f4f4";
+    let color = readColor();
+    const onTheme = () => { color = readColor(); draw(); };
+    window.addEventListener("themechange", onTheme);
     const LINK = 130;
     let w = 0, h = 0, nodes: Node[] = [], raf = 0, visible = true;
 
@@ -65,7 +68,7 @@ export default function NetworkBackground() {
     resize();
     if (!reduce) raf = requestAnimationFrame(loop);
 
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); };
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); window.removeEventListener("themechange", onTheme); };
   }, []);
 
   return <canvas ref={ref} className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-60" aria-hidden="true" />;

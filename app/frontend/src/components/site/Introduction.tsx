@@ -1,7 +1,7 @@
-import { site } from "@/data/site";
 import Section from "./Section";
 import SectionHeading from "./SectionHeading";
 import StatsCounter from "./StatsCounter";
+import DotPortrait from "./DotPortrait";
 
 export default function Introduction() {
   return (
@@ -33,13 +33,9 @@ export default function Introduction() {
         </div>
 
         <div data-reveal className="md:col-span-5">
-          <img
-            src={site.aboutImage}
-            alt="Portrait of Ahmad Choirudin"
-            width={720}
-            height={1074}
-            loading="lazy"
-            className="aspect-[4/5] w-full max-w-md rounded-2xl border border-line object-cover grayscale transition duration-700 hover:grayscale-0 md:ml-auto"
+          <DotPortrait
+            label="Portrait of Ahmad Choirudin"
+            className="aspect-[4/5] w-full max-w-md overflow-hidden rounded-2xl border border-line bg-card md:ml-auto"
           />
         </div>
       </div>

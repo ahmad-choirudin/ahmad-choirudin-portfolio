@@ -3,6 +3,7 @@ import { site } from "@/data/site";
 import ScrambleText from "./ScrambleText";
 import Magnetic from "./Magnetic";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 import { Container } from "./Section";
 
 export default function SiteNav() {
@@ -37,6 +38,7 @@ export default function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <div className="hidden sm:block">
             <Magnetic>
               <a

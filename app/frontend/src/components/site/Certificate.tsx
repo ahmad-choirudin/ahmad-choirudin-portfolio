@@ -55,7 +55,7 @@ function Lightbox({ cert, onClose }: { cert: Cert; onClose: () => void }) {
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-bg/70 text-lg text-fg backdrop-blur transition-colors hover:border-accent hover:text-accent"
+        className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-fg/25 bg-bg/70 text-lg text-fg backdrop-blur transition-colors hover:border-accent hover:text-accent"
       >
         ✕
       </button>
@@ -75,7 +75,7 @@ function Lightbox({ cert, onClose }: { cert: Cert; onClose: () => void }) {
             href={cert.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border border-white/25 px-4 py-2 text-sm text-fg transition-colors hover:border-accent hover:text-accent"
+            className="rounded-full border border-fg/25 px-4 py-2 text-sm text-fg transition-colors hover:border-accent hover:text-accent"
           >
             View Certificate ↗
           </a>
@@ -182,7 +182,7 @@ export function Certificate() {
                 className={`rounded-full border px-4 py-2 text-xs transition-colors ${
                   tab === name
                     ? "border-accent text-accent"
-                    : "border-white/15 text-muted hover:text-fg"
+                    : "border-fg/15 text-muted hover:text-fg"
                 }`}
               >
                 {name} <span className="text-subtle">{count(name)}</span>
@@ -226,7 +226,7 @@ export function Certificate() {
           type="button"
           onClick={toggle}
           aria-expanded={expanded}
-          className="rounded-full border border-white/25 px-6 py-3 text-sm text-fg transition-colors hover:border-accent hover:text-accent"
+          className="rounded-full border border-fg/25 px-6 py-3 text-sm text-fg transition-colors hover:border-accent hover:text-accent"
         >
           {expanded ? "Show less" : `View all ${certificates.length} certificates`}
         </button>

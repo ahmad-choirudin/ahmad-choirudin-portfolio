@@ -1,0 +1,15 @@
+# Ahmad Choirudin
+
+> Independent digital professional from Indonesia working across Web3, frontend development, community operations, and AI data.
+
+- Website: https://www.ahmadchoirudin.my.id/
+- LinkedIn: https://www.linkedin.com/in/ahmadchoirudin
+- GitHub: https://github.com/ahmad-choirudin
+- X: https://x.com/CubbieOG
+- Telegram: https://t.me/CubbieOG
+
+## Selected projects
+
+- [CUBBIE NFT Marketplace](https://www.cubbienft.my.id/): NFT marketplace frontend built with React, TypeScript, and Tailwind CSS.
+- [CUBBIE Web3 Research OS](https://www.web3os.my.id/): Web3 research dashboard with live market data, DeFi insights, and wallet monitoring.
+- [CUBBIE Airdrop Tracker](https://www.dropwatch.web.id/): Dashboard for tracking and managing airdrop opportunities.

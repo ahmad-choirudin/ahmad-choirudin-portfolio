@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://www.ahmadchoirudin.my.id/sitemap.xml
