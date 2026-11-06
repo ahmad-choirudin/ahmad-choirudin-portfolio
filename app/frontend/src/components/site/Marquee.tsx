@@ -4,8 +4,13 @@ export default function Marquee() {
   const row = (hidden: boolean) => (
     <ul className="flex shrink-0 items-center gap-8 pr-8" aria-hidden={hidden}>
       {tools.map((t) => (
-        <li key={t} className="flex items-center gap-8 whitespace-nowrap text-sm text-muted">
-          <span>{t}</span>
+        <li key={t.name} className="flex items-center gap-8 whitespace-nowrap text-sm text-muted">
+          <span className="flex items-center gap-2.5">
+            <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 fill-current" aria-hidden="true">
+              <path d={t.icon} />
+            </svg>
+            {t.name}
+          </span>
           <span className="text-accent/60" aria-hidden="true">✳</span>
         </li>
       ))}
