@@ -14,13 +14,11 @@ export default function Hero() {
     <section className="relative isolate flex min-h-[88svh] items-center overflow-hidden pt-16">
       <NetworkBackground />
 
-      {/* Cahaya aksen di belakang foto */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 top-1/4 -z-10 h-[28rem] w-[28rem] rounded-full bg-accent/10 blur-3xl"
       />
 
-      {/* Foto */}
       <div className="absolute inset-y-0 right-0 w-full md:w-1/2 md:pt-16">
         <img
           src={site.heroImage}
@@ -29,11 +27,11 @@ export default function Hero() {
           height={1280}
           className="hero-photo h-full w-full object-cover object-[center_20%] opacity-70 md:opacity-100"
         />
-        {/* HP: gelap merata supaya teks terbaca */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-bg/30 md:hidden" />
-        {/* Desktop: pudar tipis ke kiri */}
+
         <div className="absolute inset-0 hidden bg-gradient-to-r from-bg via-bg/10 to-transparent md:block md:w-1/3" />
-        {/* Pudar ke bawah supaya menyatu dengan marquee */}
+
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
       </div>
 
@@ -69,15 +67,17 @@ export default function Hero() {
           <div className="mt-10 flex flex-wrap gap-3">
             <a
               href="#work"
-              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-bg transition hover:-translate-y-0.5 hover:shadow-[0_10px_26px_-10px_rgb(var(--accent-rgb)/0.7)]"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-bg transition hover:-translate-y-0.5"
             >
               Explore My Work
-              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+                →
+              </span>
             </a>
 
             <a
               href="#contact"
-              className="rounded-full border border-white/25 px-6 py-3.5 text-sm text-fg transition hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+              className="rounded-full border border-fg/25 px-6 py-3.5 text-sm text-fg transition hover:-translate-y-0.5 hover:border-accent hover:text-accent"
             >
               Let’s Connect
             </a>
