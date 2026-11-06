@@ -68,6 +68,19 @@ html[data-theme="light"] {
   [data-reveal].is-in { opacity: 1; transform: none; }
 }
 
+/* Judul section: masuk dari kiri (eyebrow, judul, catatan bergantian) */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  [data-reveal="left"] { opacity: 1; transform: none; }
+  [data-reveal="left"] > * {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity .7s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
+  }
+  [data-reveal="left"] > :nth-child(2) { transition-delay: .1s; }
+  [data-reveal="left"] > :nth-child(3) { transition-delay: .2s; }
+  [data-reveal="left"].is-in > * { opacity: 1; transform: none; }
+}
+
 .ln { display: block; }
 .ln.acc > span { color: var(--accent); }
 .hero-photo { translate: 0 var(--py, 0px); }
