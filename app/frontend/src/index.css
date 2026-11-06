@@ -68,17 +68,28 @@ html[data-theme="light"] {
   [data-reveal].is-in { opacity: 1; transform: none; }
 }
 
-/* Judul section: masuk dari kiri (eyebrow, judul, catatan bergantian) */
+/* Judul section: kata per kata keluar dari kiri */
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  [data-reveal="left"] { opacity: 1; transform: none; }
-  [data-reveal="left"] > * {
+  [data-reveal="words"] { opacity: 1; transform: none; }
+
+  .wd { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .15em; margin-bottom: -.15em; }
+  .wd > span {
+    display: inline-block;
+    transform: translateX(-110%);
     opacity: 0;
-    transform: translateX(-40px);
+    transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .5s ease;
+    transition-delay: calc(var(--w, 0) * 120ms + 100ms);
+  }
+  .is-in .wd > span { transform: none; opacity: 1; }
+
+  /* eyebrow dan catatan ikut meluncur tipis dari kiri */
+  [data-reveal="words"] > :not(h2) {
+    opacity: 0;
+    transform: translateX(-24px);
     transition: opacity .7s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
   }
-  [data-reveal="left"] > :nth-child(2) { transition-delay: .1s; }
-  [data-reveal="left"] > :nth-child(3) { transition-delay: .2s; }
-  [data-reveal="left"].is-in > * { opacity: 1; transform: none; }
+  [data-reveal="words"] > p:last-child:not(:first-child) { transition-delay: .35s; }
+  [data-reveal="words"].is-in > :not(h2) { opacity: 1; transform: none; }
 }
 
 .ln { display: block; }
