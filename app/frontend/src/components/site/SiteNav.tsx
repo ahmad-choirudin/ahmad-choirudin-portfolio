@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { site } from "@/data/site";
+import { usePath } from "@/router";
 import ScrambleText from "./ScrambleText";
 import Magnetic from "./Magnetic";
 import Logo from "./Logo";
@@ -8,6 +9,8 @@ import { Container } from "./Section";
 
 export default function SiteNav() {
   const [open, setOpen] = useState(false);
+  const path = usePath();
+  const isActive = (to: string) => path === to || path.startsWith(`${to}/`);
 
   useEffect(() => {
     if (!open) return;
@@ -24,15 +27,20 @@ export default function SiteNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur">
       <Container className="flex items-center justify-between py-4">
-        <a href="#" className="flex items-center gap-2 font-medium" onClick={() => setOpen(false)}>
+        <a href="/" className="flex items-center gap-2 font-medium" onClick={() => setOpen(false)}>
           <Logo className="h-7 w-7" />
           <ScrambleText text={site.name} />
         </a>
 
         <nav aria-label="Primary" className="hidden gap-8 text-sm md:flex">
           {site.nav.map((n) => (
-            <a key={n} href={`#${n.toLowerCase()}`} className="text-muted transition-colors hover:text-accent">
-              {n}
+            <a
+              key={n.to}
+              href={n.to}
+              aria-current={isActive(n.to) ? "page" : undefined}
+              className={`transition-colors hover:text-accent ${isActive(n.to) ? "text-accent" : "text-muted"}`}
+            >
+              {n.label}
             </a>
           ))}
         </nav>
@@ -42,7 +50,7 @@ export default function SiteNav() {
           <div className="hidden sm:block">
             <Magnetic>
               <a
-                href="#contact"
+                href="/contact"
                 className="rounded-full border border-accent px-4 py-2 text-xs text-accent transition-colors hover:bg-accent hover:text-bg"
               >
                 Let’s Connect
@@ -80,18 +88,21 @@ export default function SiteNav() {
             <nav aria-label="Mobile" className="flex flex-col">
               {site.nav.map((n, i) => (
                 <a
-                  key={n}
-                  href={`#${n.toLowerCase()}`}
+                  key={n.to}
+                  href={n.to}
                   onClick={() => setOpen(false)}
-                  className="flex items-baseline gap-4 border-b border-line py-4 font-display text-4xl font-semibold tracking-tight text-fg"
+                  aria-current={isActive(n.to) ? "page" : undefined}
+                  className={`flex items-baseline gap-4 border-b border-line py-4 font-display text-4xl font-semibold tracking-tight ${
+                    isActive(n.to) ? "text-accent" : "text-fg"
+                  }`}
                 >
                   <span className="font-sans text-xs tabular-nums text-subtle">{String(i + 1).padStart(2, "0")}</span>
-                  {n}
+                  {n.label}
                 </a>
               ))}
             </nav>
             <a
-              href="#contact"
+              href="/contact"
               onClick={() => setOpen(false)}
               className="rounded-full bg-accent px-5 py-4 text-center text-sm font-medium text-bg"
             >
