@@ -3,17 +3,13 @@ export const site = {
   role: "Independent Digital Professional · Indonesia",
   heroImage: "/hero.webp",
   email: "ahmadchoirudin86@gmail.com",
-  // Nomor WhatsApp format internasional tanpa + (contoh: "628123456789").
-  // Kosong = form kontak membuka aplikasi email.
-  whatsapp: "",
+  whatsapp: "+6285739409304",
 
   nav: [
-    "Work",
-    "About",
-    "Experience",
-    "Expertise",
-    "Credentials",
-    "Contact",
+    { label: "Work", to: "/work" },
+    { label: "About", to: "/about" },
+    { label: "Credentials", to: "/credentials" },
+    { label: "Contact", to: "/contact" },
   ],
   
   socials: [
