@@ -8,7 +8,7 @@ type Props = {
 
 export default function SectionHeading({ index, eyebrow, title, note, className = "" }: Props) {
   return (
-    <div className={className}>
+    <div data-reveal="left" className={className}>
       <p className="flex items-center gap-3 font-mono text-eyebrow font-medium uppercase text-accent">
         {index && <span className="tabular-nums text-subtle">{index}</span>}
         <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
