@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
+import { usePath } from "@/router";
 
 export default function CursorLayer() {
+  const path = usePath();
   const bar = useRef<HTMLDivElement>(null);
   const glow = useRef<HTMLDivElement>(null);
 
@@ -64,7 +66,7 @@ export default function CursorLayer() {
       removeEventListener("pointermove", onMove);
       document.documentElement.removeEventListener("pointerleave", hideGlow);
     };
-  }, []);
+  }, [path]);
 
   return (
     <>
