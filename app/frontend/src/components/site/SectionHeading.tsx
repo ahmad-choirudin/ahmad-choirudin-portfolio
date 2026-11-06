@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 type Props = {
   index?: string;
   eyebrow: string;
@@ -7,14 +9,28 @@ type Props = {
 };
 
 export default function SectionHeading({ index, eyebrow, title, note, className = "" }: Props) {
+  const words = title.split(" ");
+
   return (
-    <div data-reveal="left" className={className}>
+    <div data-reveal="words" className={className}>
       <p className="flex items-center gap-3 font-mono text-eyebrow font-medium uppercase text-accent">
         {index && <span className="tabular-nums text-subtle">{index}</span>}
         <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
         {eyebrow}
       </p>
-      <h2 className="mt-5 font-display text-display-md font-semibold text-fg">{title}</h2>
+
+      {/* Judul muncul kata per kata dari kiri */}
+      <h2 aria-label={title} className="mt-5 font-display text-display-md font-semibold text-fg">
+        {words.map((w, i) => (
+          <Fragment key={i}>
+            <span className="wd" aria-hidden="true" style={{ "--w": i } as React.CSSProperties}>
+              <span>{w}</span>
+            </span>
+            {i < words.length - 1 && " "}
+          </Fragment>
+        ))}
+      </h2>
+
       {note && <p className="mt-4 max-w-md text-base leading-7 text-muted">{note}</p>}
     </div>
   );
