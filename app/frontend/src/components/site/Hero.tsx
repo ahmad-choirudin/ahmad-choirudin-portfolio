@@ -15,7 +15,6 @@ export default function Hero() {
   const [done, setDone] = useState(false);
   const handleDone = useCallback(() => setDone(true), []);
 
-  // Jaring pengaman: foto asli selalu muncul meski animasi partikel gagal.
   useEffect(() => {
     const t = window.setTimeout(() => setDone(true), 5000);
     return () => window.clearTimeout(t);
@@ -90,7 +89,7 @@ export default function Hero() {
 
           <div className="mt-10 flex flex-wrap gap-3">
             <a
-              href="#work"
+              href="/work"
               className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-bg transition hover:-translate-y-0.5 hover:shadow-[0_10px_26px_-10px_rgb(var(--accent-rgb)/0.7)]"
             >
               Explore My Work
@@ -98,7 +97,7 @@ export default function Hero() {
             </a>
 
             <a
-              href="#contact"
+              href="/contact"
               className="rounded-full border border-fg/25 px-6 py-3.5 text-sm text-fg transition hover:-translate-y-0.5 hover:border-accent hover:text-accent"
             >
               Let’s Connect
