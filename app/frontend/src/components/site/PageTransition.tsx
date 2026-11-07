@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { site } from "@/data/site";
+import { useSetGate } from "@/router";
 
 const COLUMNS = 7;
 const COVER_MS = 800;
@@ -7,19 +8,17 @@ const REVEAL_MS = 780;
 
 type Phase = "idle" | "cover" | "reveal";
 
-const labelFor = (hash: string, fallback: string): string => {
-  const id = decodeURIComponent(hash.slice(1)).toLowerCase();
-  const match = site.nav.find((n) => n.toLowerCase() === id);
-  if (match) return match;
-  return fallback.trim() || id.charAt(0).toUpperCase() + id.slice(1);
+const labelFor = (to: string): string => {
+  const pathname = to.split(/[?#]/)[0] || "/";
+  return site.nav.find((n) => n.to === pathname)?.label ?? "";
 };
 
 export default function PageTransition() {
+  const setGate = useSetGate();
   const [phase, setPhase] = useState<Phase>("idle");
   const [label, setLabel] = useState<string | null>(null);
   const phaseRef = useRef<Phase>("idle");
   const timer = useRef<number | null>(null);
-  const pendingHash = useRef<string | null>(null);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -34,106 +33,40 @@ export default function PageTransition() {
       timer.current = null;
     };
 
-    const finish = () => {
-      const hash = pendingHash.current;
-      pendingHash.current = null;
-
-      if (hash) {
-        const target = document.getElementById(
-          decodeURIComponent(hash.slice(1))
-        );
-
-        if (target) {
-          const root = document.documentElement;
-          root.style.scrollBehavior = "auto";
-          target.scrollIntoView({ block: "start" });
-          root.style.scrollBehavior = "";
-
-          if (history.pushState) history.pushState(null, "", hash);
-
-          if (target instanceof HTMLElement) {
-            if (!target.hasAttribute("tabindex")) {
-              target.setAttribute("tabindex", "-1");
-            }
-
-            target.focus({ preventScroll: true });
-          }
-        }
-      }
-
-      update("reveal");
-
-      timer.current = window.setTimeout(() => {
-        update("idle");
-        setLabel(null);
-      }, REVEAL_MS);
-    };
-
-    const onClick = (event: MouseEvent) => {
-      if (
-        event.defaultPrevented ||
-        event.button !== 0 ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey
-      ) {
+    setGate((to, go) => {
+      if (reduced.matches) {
+        go();
         return;
       }
-
-      const anchor = (event.target as HTMLElement).closest(
-        "a[href]"
-      ) as HTMLAnchorElement | null;
-
-      if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) {
-        return;
-      }
-
-      const url = new URL(anchor.href, window.location.href);
-
-      if (
-        url.origin !== location.origin ||
-        url.pathname !== location.pathname ||
-        !url.hash ||
-        url.hash === "#main"
-      ) {
-        return;
-      }
-
-      if (reduced.matches || phaseRef.current !== "idle") return;
-
-      const id = decodeURIComponent(url.hash.slice(1));
-      if (!document.getElementById(id)) return;
-
-      event.preventDefault();
+      if (phaseRef.current !== "idle") return;
 
       clear();
-      pendingHash.current = url.hash;
-
-      setLabel(labelFor(url.hash, anchor.textContent ?? ""));
+      setLabel(labelFor(to));
       update("cover");
 
-      timer.current = window.setTimeout(finish, COVER_MS);
-    };
-
-    document.addEventListener("click", onClick);
+      timer.current = window.setTimeout(() => {
+        go();
+        update("reveal");
+        timer.current = window.setTimeout(() => {
+          update("idle");
+          setLabel(null);
+        }, REVEAL_MS);
+      }, COVER_MS);
+    });
 
     return () => {
-      document.removeEventListener("click", onClick);
+      setGate(null);
       clear();
     };
-  }, []);
+  }, [setGate]);
 
   return (
-    <div
-      className={`page-curtain ${phase !== "idle" ? `is-${phase}` : ""}`}
-      aria-hidden="true"
-    >
+    <div className={`page-curtain ${phase !== "idle" ? `is-${phase}` : ""}`} aria-hidden="true">
       {Array.from({ length: COLUMNS }, (_, index) => (
         <span
           key={index}
           className="page-curtain__panel"
-          style={{ "--panel": index } as React.CSSProperties}
+          style={{ "--panel": index } as CSSProperties}
         />
       ))}
 
