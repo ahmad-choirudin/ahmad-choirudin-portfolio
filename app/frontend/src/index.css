@@ -29,7 +29,12 @@ html[data-theme="light"] {
 }
 
 @layer base {
-  html { scroll-padding-top: 5rem; -webkit-text-size-adjust: 100%; }
+  html {
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
+    max-width: 100%;
+  }
   body {
     background: var(--bg);
     color: var(--fg);
@@ -37,6 +42,8 @@ html[data-theme="light"] {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
+    max-width: 100%;
   }
   h1, h2, h3 { text-wrap: balance; }
   p { text-wrap: pretty; }
