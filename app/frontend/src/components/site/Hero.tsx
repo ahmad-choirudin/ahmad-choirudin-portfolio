@@ -15,6 +15,7 @@ export default function Hero() {
   const [done, setDone] = useState(false);
   const handleDone = useCallback(() => setDone(true), []);
 
+  // Jaring pengaman: foto asli selalu muncul meski animasi partikel gagal.
   useEffect(() => {
     const t = window.setTimeout(() => setDone(true), 5000);
     return () => window.clearTimeout(t);
@@ -31,7 +32,7 @@ export default function Hero() {
       />
 
       {/* Foto: partikel berkumpul, lalu crossfade ke foto asli */}
-      <div className="absolute inset-y-0 right-0 w-full md:w-1/2 md:pt-16">
+      <div className="absolute inset-y-0 right-0 w-full md:w-1/2">
         <div className="hero-photo relative h-full w-full">
           <img
             src={site.heroImage}
@@ -52,8 +53,8 @@ export default function Hero() {
         </div>
         {/* HP: gelap merata supaya teks terbaca */}
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-bg/30 md:hidden" />
-        {/* Desktop: pudar tipis ke kiri */}
-        <div className="absolute inset-0 hidden bg-gradient-to-r from-bg via-bg/10 to-transparent md:block md:w-1/3" />
+        {/* Desktop: pudar ke kiri supaya tepi foto menyatu dengan latar */}
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-bg via-bg/30 to-transparent md:block md:w-2/3" />
         {/* Pudar ke bawah supaya menyatu dengan marquee */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
       </div>
