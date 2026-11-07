@@ -96,3 +96,32 @@
   .page-enter { animation: page-in .35s ease both; }
 }
 
+/* Nuansa warna latar (aurora). Ubah warnanya lewat tiga variabel --glow-*. */
+:root {
+  --glow-1: 99 102 241;   /* indigo */
+  --glow-2: 34 211 238;   /* cyan */
+  --glow-3: 168 85 247;   /* ungu */
+  --glow-alpha: 1;        /* kekuatan cahaya: 0 = mati, 1 = normal */
+}
+html[data-theme="light"] { --glow-alpha: .55; }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 35% at 18% 20%, rgb(var(--glow-1) / calc(.22 * var(--glow-alpha))), transparent 70%),
+    radial-gradient(35% 30% at 85% 30%, rgb(var(--glow-2) / calc(.14 * var(--glow-alpha))), transparent 70%),
+    radial-gradient(45% 40% at 60% 90%, rgb(var(--glow-3) / calc(.16 * var(--glow-alpha))), transparent 70%);
+}
+
+/* Cahaya bergeser pelan, dimatikan kalau perangkat meminta gerakan dikurangi */
+@media (prefers-reduced-motion: no-preference) {
+  body::before { animation: glow-drift 36s ease-in-out infinite alternate; }
+  @keyframes glow-drift {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(4%, -3%, 0) scale(1.08); }
+  }
+}
