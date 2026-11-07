@@ -1,40 +1,41 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+  type RefObject,
+} from "react";
+import { BrowserRouter, useLocation, useNavigate as useRouterNavigate } from "react-router-dom";
+
+// Lapisan tipis di atas react-router-dom v7. API lama (usePath, useNavigate, useSetGate)
+// dipertahankan supaya komponen yang sudah ada — termasuk PageTransition — tidak perlu diubah.
 
 export type Gate = (to: string, go: () => void) => void;
 
-type RouterValue = {
-  path: string;
-  navigate: (to: string) => void;
+type GateValue = {
   setGate: (gate: Gate | null) => void;
+  gateRef: RefObject<Gate | null>;
 };
 
-const RouterContext = createContext<RouterValue>({ path: "/", navigate: () => {}, setGate: () => {} });
+const GateContext = createContext<GateValue>({
+  setGate: () => {},
+  gateRef: { current: null },
+});
 
 const normalize = (p: string) => (p.length > 1 ? p.replace(/\/+$/, "") : p) || "/";
 const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
 
-export function RouterProvider({ children }: { children: ReactNode }) {
-  const [path, setPath] = useState(() => normalize(window.location.pathname));
-  const gateRef = useRef<Gate | null>(null);
-
-  const setGate = useCallback((gate: Gate | null) => {
-    gateRef.current = gate;
-  }, []);
-
-  const navigate = useCallback((to: string) => {
-    const url = new URL(to, window.location.href);
-    window.history.pushState(null, "", url.pathname + url.search + url.hash);
-    setPath(normalize(url.pathname));
-    toTop();
-  }, []);
+// Semua <a href="/..."> internal berpindah halaman tanpa reload dan melewati "gate"
+// (tirai transisi) lebih dulu, sama seperti perilaku router sebelumnya.
+function LinkInterceptor() {
+  const navigate = useRouterNavigate();
+  const { gateRef } = useContext(GateContext);
 
   useEffect(() => {
-    const onPop = () => {
-      setPath(normalize(window.location.pathname));
-      toTop();
-    };
-
-    // Semua <a href="/..."> internal otomatis berpindah halaman tanpa reload.
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = (e.target as Element).closest("a[href]") as HTMLAnchorElement | null;
@@ -58,18 +59,43 @@ export function RouterProvider({ children }: { children: ReactNode }) {
       else navigate(to);
     };
 
-    window.addEventListener("popstate", onPop);
     document.addEventListener("click", onClick);
-    return () => {
-      window.removeEventListener("popstate", onPop);
-      document.removeEventListener("click", onClick);
-    };
-  }, [navigate]);
+    return () => document.removeEventListener("click", onClick);
+  }, [navigate, gateRef]);
 
-  const value = useMemo(() => ({ path, navigate, setGate }), [path, navigate, setGate]);
-  return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
+  return null;
 }
 
-export const usePath = () => useContext(RouterContext).path;
-export const useNavigate = () => useContext(RouterContext).navigate;
-export const useSetGate = () => useContext(RouterContext).setGate;
+// Scroll ke atas setiap kali halaman berganti (termasuk tombol back/forward).
+function ScrollReset() {
+  const { pathname } = useLocation();
+  useLayoutEffect(() => {
+    toTop();
+  }, [pathname]);
+  return null;
+}
+
+export function RouterProvider({ children }: { children: ReactNode }) {
+  const gateRef = useRef<Gate | null>(null);
+  const setGate = useCallback((gate: Gate | null) => {
+    gateRef.current = gate;
+  }, []);
+  const value = useMemo(() => ({ setGate, gateRef }), [setGate]);
+
+  return (
+    <BrowserRouter>
+      <GateContext.Provider value={value}>
+        <LinkInterceptor />
+        <ScrollReset />
+        {children}
+      </GateContext.Provider>
+    </BrowserRouter>
+  );
+}
+
+export const usePath = () => normalize(useLocation().pathname);
+export const useNavigate = () => {
+  const navigate = useRouterNavigate();
+  return useCallback((to: string) => navigate(to), [navigate]);
+};
+export const useSetGate = () => useContext(GateContext).setGate;

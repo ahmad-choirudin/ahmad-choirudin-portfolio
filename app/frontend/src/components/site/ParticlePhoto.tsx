@@ -25,7 +25,9 @@ export default function ParticlePhoto({
   const ref = useRef<HTMLCanvasElement>(null);
   // Callback disimpan di ref supaya effect tidak diulang saat parent re-render.
   const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
 
   useEffect(() => {
     const cv = ref.current;

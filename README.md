@@ -76,9 +76,9 @@
 ## ◈ TECH STACK
 
 <p>
-  <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React 18" />
+  <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React 19" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 5" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 3" />
   <img src="https://img.shields.io/badge/lucide--react-20232A?style=flat-square" alt="lucide-react" />
   <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel" />
@@ -88,7 +88,7 @@ No animation library is used. All motion is built with CSS, `IntersectionObserve
 
 ## ◈ GETTING STARTED
 
-Requires Node.js 18 or newer.
+Requires Node.js 20.19 or newer.
 
 ```bash
 git clone https://github.com/ahmad-choirudin/portfolio-modern.git
