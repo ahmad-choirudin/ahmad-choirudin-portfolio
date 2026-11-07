@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Home } from "lucide-react";
 import { site } from "@/data/site";
 import { usePath } from "@/router";
 import ScrambleText from "./ScrambleText";
@@ -39,26 +38,14 @@ export default function SiteNav() {
               key={n.to}
               href={n.to}
               aria-current={isActive(n.to) ? "page" : undefined}
-              className={`inline-flex items-center gap-1.5 transition-colors hover:text-accent ${isActive(n.to) ? "text-accent" : "text-muted"}`}
+              className={`transition-colors hover:text-accent ${isActive(n.to) ? "text-accent" : "text-muted"}`}
             >
-              {n.to === "/" && <Home className="h-4 w-4" aria-hidden="true" />}
               {n.label}
             </a>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <a
-            href="/"
-            aria-label="Home"
-            aria-current={path === "/" ? "page" : undefined}
-            onClick={() => setOpen(false)}
-            className={`grid h-10 w-10 place-items-center rounded-full border transition-colors md:hidden ${
-              path === "/" ? "border-accent text-accent" : "border-line text-muted hover:text-accent"
-            }`}
-          >
-            <Home className="h-4 w-4" aria-hidden="true" />
-          </a>
+        <div className="flex items-center gap-3">
           <ThemeToggle />
           <div className="hidden sm:block">
             <Magnetic>
