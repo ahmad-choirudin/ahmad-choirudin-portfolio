@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""Generate src/data/certificate.ts from a single source file (JSON or CSV).
+
+Adding a certificate only means editing the source file, never the code:
+
+    1. put the image at public/certificates/<issuer>-<number>.webp
+    2. add one entry to src/data/certificates.json
+    3. run: python3 scripts/sync_certificates.py
+
+Image numbers are assigned automatically per issuer (avalanche-01, avalanche-02, ...),
+unless an entry sets its own "n". The script rejects bad data: empty fields,
+non-https links, duplicate titles, or image files that do not exist yet.
+
+    python3 scripts/sync_certificates.py                     # write certificate.ts
+    python3 scripts/sync_certificates.py --check             # CI: fail if certificate.ts is stale
+    python3 scripts/sync_certificates.py data.csv            # CSV source
+
+JSON format:
+    {"issuers": {"avalanche": {"name": "Avalanche Academy", "sub": "Blockchain Development"}},
+     "certificates": [{"issuer": "avalanche", "title": "...", "learned": "...", "href": "https://..."}]}
+
+CSV format (one row per certificate, the n column may be empty):
+    prefix,issuer,sub,title,learned,href,n
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_SOURCE = ROOT / "src" / "data" / "certificates.json"
+TARGET = ROOT / "src" / "data" / "certificate.ts"
+IMAGES = ROOT / "public" / "certificates"
+REQUIRED = ("prefix", "issuer", "sub", "title", "learned", "href")
+FIELDS = ("issuer", "title", "sub", "image", "learned", "href")
+
+
+class SourceError(Exception):
+    pass
+
+
+def load_json(path: Path) -> list[dict]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SourceError(f"{path.name}: invalid JSON (line {exc.lineno}: {exc.msg})")
+    issuers = data.get("issuers", {})
+    rows = []
+    for i, entry in enumerate(data.get("certificates", []), 1):
+        key = entry.get("issuer", "")
+        if key not in issuers:
+            raise SourceError(f"entry #{i}: issuer '{key}' is not defined in \"issuers\"")
+        rows.append({**entry, "prefix": key, "issuer": issuers[key].get("name", ""), "sub": issuers[key].get("sub", "")})
+    return rows
+
+
+def load_csv(path: Path) -> list[dict]:
+    with path.open(encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        missing = [c for c in REQUIRED if c not in (reader.fieldnames or [])]
+        if missing:
+            raise SourceError(f"{path.name}: missing columns: {', '.join(missing)}")
+        return [{k: (v or "").strip() for k, v in row.items()} for row in reader]
+
+
+def build(rows: list[dict], check_images: bool) -> list[dict]:
+    errors: list[str] = []
+    counters: dict[str, int] = {}
+    names: dict[str, str] = {}
+    seen_images: set[str] = set()
+    seen_titles: set[tuple[str, str]] = set()
+    certs: list[dict] = []
+
+    for i, row in enumerate(rows, 1):
+        where = f"entry #{i} ({row.get('title') or '?'})"
+        empty = [f for f in REQUIRED if not str(row.get(f, "")).strip()]
+        if empty:
+            errors.append(f"{where}: empty fields: {', '.join(empty)}")
+            continue
+
+        prefix = row["prefix"]
+        if names.setdefault(prefix, row["issuer"]) != row["issuer"]:
+            errors.append(f"{where}: issuer '{prefix}' has two different names")
+
+        raw_n = row.get("n")
+        try:
+            n = int(raw_n) if raw_n not in (None, "") else counters.get(prefix, 0) + 1
+        except ValueError:
+            errors.append(f"{where}: n must be a number, not '{raw_n}'")
+            continue
+        counters[prefix] = max(counters.get(prefix, 0), n)
+
+        image = f"/certificates/{prefix}-{n:02d}.webp"
+        if image in seen_images:
+            errors.append(f"{where}: image {image} is used twice")
+        seen_images.add(image)
+
+        if (prefix, row["title"]) in seen_titles:
+            errors.append(f"{where}: title already exists for the same issuer")
+        seen_titles.add((prefix, row["title"]))
+
+        if not row["href"].startswith("https://"):
+            errors.append(f"{where}: href must start with https://")
+        if check_images and not (IMAGES / Path(image).name).exists():
+            errors.append(f"{where}: file public{image} does not exist yet")
+
+        certs.append({
+            "issuer": row["issuer"], "title": row["title"], "sub": row["sub"],
+            "image": image, "learned": row["learned"], "href": row["href"],
+        })
+
+    if not rows:
+        errors.append("no certificates in the source file")
+    if errors:
+        raise SourceError("\n".join(errors))
+    return certs
+
+
+def render(certs: list[dict], source: Path) -> str:
+    src = source.relative_to(ROOT) if source.is_relative_to(ROOT) else source
+    out = [
+        f"// GENERATED by scripts/sync_certificates.py from {src.as_posix()}.",
+        "// Do not edit by hand: change the source file, then run `npm run certs`.",
+        "",
+        "export type Cert = {",
+        *(f"  {f}: string;" for f in FIELDS),
+        "};",
+        "",
+        "export const certificates: Cert[] = [",
+    ]
+    for c in certs:
+        out.append("  {")
+        out.extend(f"    {f}: {json.dumps(c[f], ensure_ascii=False)}," for f in FIELDS)
+        out.append("  },")
+    out.append("];")
+    return "\n".join(out) + "\n"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("source", nargs="?", default=str(DEFAULT_SOURCE), help="source file (.json or .csv)")
+    parser.add_argument("--check", action="store_true", help="do not write; fail if certificate.ts does not match the source")
+    parser.add_argument("--no-image-check", action="store_true", help="skip the image file check")
+    args = parser.parse_args()
+
+    source = Path(args.source).resolve()
+    if not source.exists():
+        print(f"Source file not found: {source}", file=sys.stderr)
+        return 2
+
+    try:
+        rows = load_csv(source) if source.suffix.lower() == ".csv" else load_json(source)
+        certs = build(rows, check_images=not args.no_image_check)
+    except SourceError as exc:
+        print(f"FAIL\n{exc}", file=sys.stderr)
+        return 1
+
+    content = render(certs, source)
+    issuers = len({c["issuer"] for c in certs})
+
+    if args.check:
+        current = TARGET.read_text(encoding="utf-8") if TARGET.exists() else ""
+        if current != content:
+            print(f"FAIL: {TARGET.name} does not match {source.name}. Run `npm run certs` and commit the result.", file=sys.stderr)
+            return 1
+        print(f"Passed: {TARGET.name} matches the source ({len(certs)} certificates, {issuers} issuers)")
+        return 0
+
+    TARGET.write_text(content, encoding="utf-8")
+    print(f"{len(certs)} certificates from {issuers} issuers -> {TARGET.relative_to(ROOT).as_posix()}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
