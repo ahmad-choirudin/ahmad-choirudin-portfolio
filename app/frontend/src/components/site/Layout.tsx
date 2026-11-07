@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { useReveal } from "@/hooks/useReveal";
+import { useTilt } from "@/hooks/useTilt";
 import { usePath } from "@/router";
 import SiteNav from "./SiteNav";
 import CursorLayer from "./CursorLayer";
@@ -7,6 +9,8 @@ import SiteFooter from "./SiteFooter";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const path = usePath();
+  useReveal();
+  useTilt();
   return (
     <>
       <a

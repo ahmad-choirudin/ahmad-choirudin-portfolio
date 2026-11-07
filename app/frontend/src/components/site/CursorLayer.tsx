@@ -7,24 +7,7 @@ export default function CursorLayer() {
   const glow = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const items = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
-    items.forEach((el) => {
-      const siblings = Array.from(el.parentElement?.children ?? []);
-      el.style.setProperty("--i", String(Math.min(siblings.indexOf(el), 5)));
-    });
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-in");
-            io.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
-    );
-    items.forEach((el) => io.observe(el));
-
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return () => io.disconnect();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const hero = document.querySelector<HTMLElement>(".hero-photo");
     let ticking = false;
@@ -60,7 +43,6 @@ export default function CursorLayer() {
     }
 
     return () => {
-      io.disconnect();
       cancelAnimationFrame(raf);
       removeEventListener("scroll", onScroll);
       removeEventListener("pointermove", onMove);

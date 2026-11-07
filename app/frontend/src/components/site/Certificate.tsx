@@ -136,6 +136,7 @@ export function Certificate() {
           {featured.map((c) => (
             <li
               key={c.image}
+              data-tilt
               className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-card transition-colors hover:border-accent/40"
             >
               <button

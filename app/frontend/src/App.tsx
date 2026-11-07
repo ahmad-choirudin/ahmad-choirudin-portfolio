@@ -7,6 +7,7 @@ import Home from "@/pages/Home";
 // Halaman selain Home dimuat saat dibutuhkan (code-splitting) supaya bundle awal kecil.
 // Credentials sengaja lazy karena berisi banyak gambar sertifikat.
 const Work = lazy(() => import("@/pages/Work"));
+const ProjectDetail = lazy(() => import("@/pages/ProjectDetail"));
 const About = lazy(() => import("@/pages/About"));
 const Credentials = lazy(() => import("@/pages/Credentials"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/home" element={<Navigate to="/" replace />} />
             <Route path="/index.html" element={<Navigate to="/" replace />} />
             <Route path="/work" element={<Work />} />
+            <Route path="/work/:slug" element={<ProjectDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/credentials" element={<Credentials />} />
             <Route path="/contact" element={<ContactPage />} />

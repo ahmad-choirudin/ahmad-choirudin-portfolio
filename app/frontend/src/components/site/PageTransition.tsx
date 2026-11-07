@@ -10,7 +10,8 @@ type Phase = "idle" | "cover" | "reveal";
 
 const labelFor = (to: string): string => {
   const pathname = to.split(/[?#]/)[0] || "/";
-  return site.nav.find((n) => n.to === pathname)?.label ?? "";
+  const match = site.nav.find((n) => (n.to === "/" ? pathname === "/" : pathname === n.to || pathname.startsWith(`${n.to}/`)));
+  return match?.label ?? "";
 };
 
 export default function PageTransition() {

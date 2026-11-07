@@ -80,8 +80,11 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             ))}
           </ul>
           <div className="mt-8 flex flex-wrap gap-3">
+            <a href={`/work/${project.slug}`} className="rounded-full bg-accent px-5 py-3 text-sm font-medium text-bg transition hover:-translate-y-0.5">
+              Full case study
+            </a>
             {project.demo && (
-              <a href={project.demo} target="_blank" rel="noopener noreferrer" className="rounded-full bg-accent px-5 py-3 text-sm font-medium text-bg transition hover:-translate-y-0.5">
+              <a href={project.demo} target="_blank" rel="noopener noreferrer" className="rounded-full border border-fg/25 px-5 py-3 text-sm text-fg transition hover:border-accent hover:text-accent">
                 Live Demo ↗
               </a>
             )}
@@ -170,6 +173,7 @@ export default function SelectedWork() {
             <article key={project.title} className="pop-in grid items-center gap-8 md:grid-cols-12 md:gap-12">
               <button
                 type="button"
+                data-tilt
                 onClick={() => setActive(project)}
                 aria-label={`View details of ${project.title}`}
                 className={`group relative block overflow-hidden rounded-2xl border border-line bg-card text-left transition-colors hover:border-accent/40 md:col-span-7 ${
@@ -205,13 +209,12 @@ export default function SelectedWork() {
                   ))}
                 </ul>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setActive(project)}
+                  <a
+                    href={`/work/${project.slug}`}
                     className="rounded-full bg-accent px-5 py-3 text-sm font-medium text-bg transition hover:-translate-y-0.5"
                   >
-                    Details
-                  </button>
+                    Case study
+                  </a>
                   {project.demo && (
                     <a href={project.demo} target="_blank" rel="noopener noreferrer" className="rounded-full border border-fg/25 px-5 py-3 text-sm text-fg transition hover:border-accent hover:text-accent">
                       Live Demo ↗

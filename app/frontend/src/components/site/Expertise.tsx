@@ -20,7 +20,7 @@ export default function Expertise() {
           const Icon = icons[e.icon];
           return (
             <li key={e.name} data-reveal>
-              <div className="group h-full rounded-2xl border border-line bg-card p-6 transition-colors hover:border-accent/40">
+              <div data-tilt className="group h-full rounded-2xl border border-line bg-card p-6 transition-colors hover:border-accent/40">
                 <div className="flex items-start justify-between">
                   <span className="grid h-11 w-11 place-items-center rounded-xl border border-line bg-bg text-accent transition-colors group-hover:border-accent/40">
                     <Icon className="h-5 w-5" aria-hidden="true" />

@@ -1,6 +1,26 @@
-export const projects = [
+export type Project = {
+  image: string;
+  /** Dipakai untuk URL halaman case study: /work/<slug>. Harus unik, huruf kecil, tanpa spasi. */
+  slug: string;
+  title: string;
+  category: string;
+  period: string;
+  text: string;
+  tools: string;
+  demo: string;
+  github: string;
+  /** Opsional — tampil di halaman case study hanya jika diisi. */
+  role?: string;
+  /** Opsional — daftar poin hasil/fitur utama. */
+  highlights?: string[];
+  /** Opsional — gambar tambahan (letakkan file di public/projects/). */
+  gallery?: { src: string; alt: string }[];
+};
+
+export const projects: Project[] = [
   {
     image: "/projects/cubbie-nft-marketplace.webp",
+    slug: "cubbie-nft-marketplace",
     title: "CUBBIE NFT Marketplace",
     category: "Marketplace",
     period: "NFT Marketplace · Frontend",
@@ -11,6 +31,7 @@ export const projects = [
   },
   {
     image: "/projects/web3-research-os.webp",
+    slug: "web3-research-os",
     title: "CUBBIE Web3 Research OS",
     category: "Dashboard",
     period: "Web3 Analytics · Research Dashboard",
@@ -21,6 +42,7 @@ export const projects = [
   },
   {
     image: "/projects/airdrop-tracker.webp",
+    slug: "airdrop-tracker",
     title: "CUBBIE Airdrop Tracker",
     category: "Dashboard",
     period: "Web3 Tracker · Dashboard",

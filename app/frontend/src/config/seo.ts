@@ -1,15 +1,21 @@
 // Satu sumber data untuk SEO: dipakai oleh halaman (usePageMeta) dan oleh plugin build
 // (plugins/seo.ts) yang membuat HTML statis per route, sitemap, dan llms-full.txt.
 // Jangan import apa pun dari "@/..." di file ini — ia juga dibaca oleh vite.config.ts.
+// Gunakan import relatif dengan ekstensi .ts.
+
+import { projects, type Project } from "../data/projects.ts";
 
 export const SITE_URL = "https://www.ahmadchoirudin.my.id";
 export const SITE_NAME = "Ahmad Choirudin";
 export const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+export const PERSON_JOB_TITLE = "Independent Digital Professional";
+export const PERSON_DESCRIPTION =
+  "Independent digital professional from Indonesia working across Web3, frontend development, community operations, and AI data.";
 
 export type RoutePath = "/" | "/work" | "/about" | "/credentials" | "/contact";
 
 export type RouteMeta = {
-  path: RoutePath;
+  path: string;
   title: string;
   description: string;
   /** Nama halaman untuk breadcrumb. */
@@ -18,6 +24,8 @@ export type RouteMeta = {
   changefreq: "weekly" | "monthly" | "yearly";
   /** true jika komponen FAQ tampil di halaman ini (untuk JSON-LD FAQPage). */
   faq?: boolean;
+  /** Breadcrumb perantara antara Home dan halaman ini (mis. Work untuk halaman case study). */
+  crumbs?: { name: string; path: string }[];
 };
 
 export const routes: Record<RoutePath, RouteMeta> = {
@@ -67,3 +75,25 @@ export const routes: Record<RoutePath, RouteMeta> = {
     faq: true,
   },
 };
+
+// ---- Halaman case study: /work/<slug> ----
+
+const clip = (text: string, max = 155) => {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  return `${cut.slice(0, cut.lastIndexOf(" "))}…`;
+};
+
+export const projectPath = (p: Project) => `/work/${p.slug}`;
+
+export const projectMeta = (p: Project): RouteMeta => ({
+  path: projectPath(p),
+  title: `${p.title} — Case Study | ${SITE_NAME}`,
+  description: clip(p.text),
+  label: p.title,
+  priority: "0.7",
+  changefreq: "monthly",
+  crumbs: [{ name: "Work", path: "/work" }],
+});
+
+export const projectRoutes = (): RouteMeta[] => projects.map(projectMeta);

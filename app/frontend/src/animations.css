@@ -162,3 +162,24 @@ body::before {
   }
   html .is-in .wd > span { transform: none; opacity: 1; }
 }
+
+/* Tilt + cahaya mengikuti kursor untuk kartu [data-tilt] (lihat hooks/useTilt.ts) */
+@media (prefers-reduced-motion: no-preference) and (pointer: fine) {
+  [data-tilt] {
+    position: relative;
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1), border-color .2s ease;
+    will-change: transform;
+  }
+  [data-tilt]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s ease;
+    background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--accent-rgb) / .1), transparent 60%);
+  }
+  [data-tilt]:hover::after { opacity: 1; }
+}

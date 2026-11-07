@@ -1,7 +1,17 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import type { Plugin } from "vite";
-import { OG_IMAGE, SITE_NAME, SITE_URL, routes, type RouteMeta } from "../src/config/seo.ts";
+import {
+  OG_IMAGE,
+  PERSON_DESCRIPTION,
+  PERSON_JOB_TITLE,
+  SITE_NAME,
+  SITE_URL,
+  projectPath,
+  projectRoutes,
+  routes,
+  type RouteMeta,
+} from "../src/config/seo.ts";
 import { site } from "../src/data/site.ts";
 import { projects } from "../src/data/projects.ts";
 import { expertise } from "../src/data/expertise.ts";
@@ -12,8 +22,8 @@ import { faq } from "../src/data/faq.ts";
 // dengan title, deskripsi, canonical, OG, dan JSON-LD yang benar, sehingga crawler tanpa JavaScript
 // membaca isi yang tepat. Juga membuat sitemap.xml, llms-full.txt, dan 404.html.
 
-const PERSON_DESCRIPTION =
-  "Independent digital professional from Indonesia working across Web3, frontend development, community operations, and AI data.";
+// Semua halaman yang dibuat statis: halaman utama + satu halaman case study per proyek.
+const allRoutes = (): RouteMeta[] => [...Object.values(routes), ...projectRoutes()];
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -39,7 +49,7 @@ const person = () => ({
   name: SITE_NAME,
   url: `${SITE_URL}/`,
   image: OG_IMAGE,
-  jobTitle: "Independent Digital Professional",
+  jobTitle: PERSON_JOB_TITLE,
   description: PERSON_DESCRIPTION,
   nationality: "Indonesian",
   knowsAbout: expertise.map((e) => e.name),
@@ -68,9 +78,10 @@ function extraJsonLd(route: RouteMeta): string {
       jsonLd({
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-          { "@type": "ListItem", position: 2, name: route.label, item: urlOf(route.path) },
-        ],
+          { name: "Home", path: "/" },
+          ...(route.crumbs ?? []),
+          { name: route.label, path: route.path },
+        ].map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.name, item: urlOf(c.path) })),
       })
     );
   }
@@ -87,11 +98,29 @@ function extraJsonLd(route: RouteMeta): string {
             "@type": "CreativeWork",
             name: p.title,
             description: p.text,
-            url: p.demo,
+            url: urlOf(projectPath(p)),
+            sameAs: [p.demo],
             image: `${SITE_URL}${p.image}`,
             creator: { "@id": `${SITE_URL}/#person` },
           },
         })),
+      })
+    );
+  }
+
+  const project = projects.find((p) => projectPath(p) === route.path);
+  if (project) {
+    blocks.push(
+      jsonLd({
+        "@type": "CreativeWork",
+        name: project.title,
+        description: project.text,
+        url: urlOf(route.path),
+        image: `${SITE_URL}${project.image}`,
+        keywords: project.tools,
+        genre: project.category,
+        sameAs: [project.demo, project.github],
+        creator: { "@id": `${SITE_URL}/#person` },
       })
     );
   }
@@ -170,7 +199,7 @@ function notFoundHtml(base: string): string {
 }
 
 function sitemapXml(today: string): string {
-  const urls = Object.values(routes)
+  const urls = allRoutes()
     .map(
       (r) =>
         `  <url><loc>${urlOf(r.path)}</loc><lastmod>${today}</lastmod><changefreq>${r.changefreq}</changefreq><priority>${r.priority}</priority></url>`
@@ -188,7 +217,7 @@ function llmsFull(): string {
   for (const s of site.socials) lines.push(`- ${s.label}: ${s.href}`);
 
   lines.push("", "## Pages", "");
-  for (const r of Object.values(routes)) lines.push(`- [${r.label}](${urlOf(r.path)}): ${r.description}`);
+  for (const r of allRoutes()) lines.push(`- [${r.label}](${urlOf(r.path)}): ${r.description}`);
 
   lines.push("", "## Experience", "");
   for (const e of experience) {
@@ -200,7 +229,19 @@ function llmsFull(): string {
 
   lines.push("", "## Projects", "");
   for (const p of projects) {
-    lines.push(`### ${p.title}`, "", `${p.category} · ${p.period}`, "", p.text, "", `- Tools: ${p.tools}`, `- Demo: ${p.demo}`, `- Source: ${p.github}`, "");
+    lines.push(
+      `### ${p.title}`,
+      "",
+      `${p.category} · ${p.period}`,
+      "",
+      p.text,
+      "",
+      `- Case study: ${urlOf(projectPath(p))}`,
+      `- Tools: ${p.tools}`,
+      `- Demo: ${p.demo}`,
+      `- Source: ${p.github}`,
+      ""
+    );
   }
 
   lines.push("## FAQ", "");
@@ -227,7 +268,7 @@ export function seoPlugin(): Plugin {
     closeBundle() {
       const base = readFileSync(resolve(outDir, "index.html"), "utf8");
 
-      for (const route of Object.values(routes)) {
+      for (const route of allRoutes()) {
         const file = route.path === "/" ? "index.html" : `${route.path.slice(1)}/index.html`;
         write(file, pageHtml(base, route));
       }
