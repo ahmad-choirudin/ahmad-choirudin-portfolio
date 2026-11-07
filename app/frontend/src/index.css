@@ -5,7 +5,7 @@
 :root {
   --bg-rgb: 8 8 8;
   --card-rgb: 14 14 14;
-  --accent-rgb: 244 244 244;
+  --accent-rgb: 184 243 74;
   --fg-rgb: 244 244 244;
   --muted-rgb: 168 168 168;
   --subtle-rgb: 135 135 135;
@@ -20,7 +20,7 @@
 html[data-theme="light"] {
   --bg-rgb: 244 244 244;
   --card-rgb: 255 255 255;
-  --accent-rgb: 8 8 8;
+  --accent-rgb: 63 98 18;
   --fg-rgb: 10 10 10;
   --muted-rgb: 88 88 88;
   --subtle-rgb: 100 100 100;
