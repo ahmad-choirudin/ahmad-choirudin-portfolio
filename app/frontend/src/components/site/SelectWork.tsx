@@ -5,7 +5,6 @@ import { projects } from "@/data/projects";
 
 type Project = (typeof projects)[number];
 
-// Filter dan pencarian baru berguna kalau proyeknya sudah cukup banyak.
 const FILTER_MIN = 4;
 
 const categoryOf = (p: Project) => p.category;
@@ -16,9 +15,9 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   const dialog = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
+    const prevOverflow = document.documentElement.style.overflow;
     const opener = document.activeElement as HTMLElement | null;
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     closeBtn.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -26,7 +25,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         return;
       }
       if (e.key !== "Tab") return;
-      // Jaga fokus tetap di dalam dialog.
       const nodes = dialog.current?.querySelectorAll<HTMLElement>("a[href], button");
       if (!nodes || nodes.length === 0) return;
       const first = nodes[0];
@@ -41,7 +39,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prevOverflow;
+      document.documentElement.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
       opener?.focus?.();
     };
