@@ -1,7 +1,7 @@
 export const site = {
   name: "Ahmad Choirudin",
   role: "Independent Digital Professional · Indonesia",
-  heroImage: "/hero.webp",
+  heroImage: "/hero.png",
   email: "ahmadchoirudin86@gmail.com",
   whatsapp: "6285739409304",
 
