@@ -1,14 +1,25 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-type RouterValue = { path: string; navigate: (to: string) => void };
+export type Gate = (to: string, go: () => void) => void;
 
-const RouterContext = createContext<RouterValue>({ path: "/", navigate: () => {} });
+type RouterValue = {
+  path: string;
+  navigate: (to: string) => void;
+  setGate: (gate: Gate | null) => void;
+};
+
+const RouterContext = createContext<RouterValue>({ path: "/", navigate: () => {}, setGate: () => {} });
 
 const normalize = (p: string) => (p.length > 1 ? p.replace(/\/+$/, "") : p) || "/";
 const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
 
 export function RouterProvider({ children }: { children: ReactNode }) {
   const [path, setPath] = useState(() => normalize(window.location.pathname));
+  const gateRef = useRef<Gate | null>(null);
+
+  const setGate = useCallback((gate: Gate | null) => {
+    gateRef.current = gate;
+  }, []);
 
   const navigate = useCallback((to: string) => {
     const url = new URL(to, window.location.href);
@@ -23,6 +34,7 @@ export function RouterProvider({ children }: { children: ReactNode }) {
       toTop();
     };
 
+    // Semua <a href="/..."> internal otomatis berpindah halaman tanpa reload.
     const onClick = (e: MouseEvent) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = (e.target as Element).closest("a[href]") as HTMLAnchorElement | null;
@@ -38,8 +50,12 @@ export function RouterProvider({ children }: { children: ReactNode }) {
         toTop();
         return;
       }
+
       e.preventDefault();
-      navigate(url.pathname + url.search + url.hash);
+      const to = url.pathname + url.search + url.hash;
+      const gate = gateRef.current;
+      if (gate) gate(to, () => navigate(to));
+      else navigate(to);
     };
 
     window.addEventListener("popstate", onPop);
@@ -50,9 +66,10 @@ export function RouterProvider({ children }: { children: ReactNode }) {
     };
   }, [navigate]);
 
-  const value = useMemo(() => ({ path, navigate }), [path, navigate]);
+  const value = useMemo(() => ({ path, navigate, setGate }), [path, navigate, setGate]);
   return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
 }
 
 export const usePath = () => useContext(RouterContext).path;
 export const useNavigate = () => useContext(RouterContext).navigate;
+export const useSetGate = () => useContext(RouterContext).setGate;
