@@ -6,13 +6,19 @@
   },
   "version": "2.0.0",
   "type": "module",
+
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "lint": "oxlint",
-    "typecheck": "tsc --noEmit"
+  "dev": "vite",
+  "build": "tsc --noEmit && vite build",
+  "preview": "vite preview",
+  "lint": "oxlint",
+  "typecheck": "tsc --noEmit",
+  "certs": "python3 scripts/sync_certificates.py",
+  "images": "python3 scripts/optimize_images.py --apply",
+  "images:check": "python3 scripts/optimize_images.py --check",
+  "audit": "python3 scripts/audit_build.py"
   },
+
   "dependencies": {
     "lucide-react": "^0.453.0",
     "react": "^19.2.0",
