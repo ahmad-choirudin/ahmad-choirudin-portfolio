@@ -125,3 +125,16 @@ body::before {
     to { transform: translate3d(4%, -3%, 0) scale(1.08); }
   }
 }
+
+/* Glow versi hangat: senada kulit dan latar gelap di foto */
+:root {
+  --glow-1: 196 128 76;   /* perunggu hangat */
+  --glow-2: 110 118 135;  /* abu kebiruan redup */
+  --glow-3: 140 98 70;    /* cokelat */
+}
+body::before {
+  background:
+    radial-gradient(38% 34% at 78% 22%, rgb(var(--glow-1) / calc(.20 * var(--glow-alpha))), transparent 70%),
+    radial-gradient(34% 30% at 12% 38%, rgb(var(--glow-2) / calc(.12 * var(--glow-alpha))), transparent 70%),
+    radial-gradient(44% 38% at 55% 92%, rgb(var(--glow-3) / calc(.14 * var(--glow-alpha))), transparent 70%);
+}
