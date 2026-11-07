@@ -154,10 +154,10 @@ body::before {
   /* Judul section: tiap kata membuka seperti lembar buku */
   html .wd { overflow: visible; perspective: 700px; }
   html .wd > span {
-    transform: rotateY(-100deg);
+    transform: rotateY(-70deg);
     transform-origin: left center;
     backface-visibility: hidden;
-    transition: transform 1s cubic-bezier(.2, .8, .2, 1), opacity .5s ease;
+    transition: transform 0.5s cubic-bezier(.2, .8, .2, 1), opacity .5s ease;
     transition-delay: calc(var(--w, 0) * 120ms + 100ms);
   }
   html .is-in .wd > span { transform: none; opacity: 1; }
