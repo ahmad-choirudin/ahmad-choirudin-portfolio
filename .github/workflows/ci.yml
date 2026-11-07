@@ -25,7 +25,11 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: app/frontend/package-lock.json
+          
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      - run: python3 scripts/sync_certificates.py --check
+      - run: python3 scripts/optimize_images.py --check
       - run: npm run build
+      - run: python3 scripts/audit_build.py
