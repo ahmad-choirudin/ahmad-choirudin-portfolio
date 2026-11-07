@@ -6,6 +6,7 @@ import Magnetic from "./Magnetic";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import { Container } from "./Section";
+import { Home } from "lucide-react";
 
 export default function SiteNav() {
   const [open, setOpen] = useState(false);
@@ -38,13 +39,14 @@ export default function SiteNav() {
               key={n.to}
               href={n.to}
               aria-current={isActive(n.to) ? "page" : undefined}
-              className={`transition-colors hover:text-accent ${isActive(n.to) ? "text-accent" : "text-muted"}`}
+              className={`inline-flex items-center gap-1.5 transition-colors hover:text-accent ${isActive(n.to) ? "text-accent" : "text-muted"}`}
             >
+              {n.to === "/" && <Home className="h-4 w-4" aria-hidden="true" />}
               {n.label}
             </a>
           ))}
         </nav>
-
+        
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <div className="hidden sm:block">
