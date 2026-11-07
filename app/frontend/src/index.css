@@ -266,7 +266,7 @@ animation-delay: calc(.2s + var(--l, 0) * .13s);
 
 .ln.acc > span {
 color: transparent;
-background: linear-gradient(100deg, var(--accent) 35%, #8c8c8c 50%, var(--accent) 65%) 0 0 / 200% 100%;
+background: linear-gradient(100deg, var(--accent) 35%, #E6FFB0 50%, var(--accent) 65%) 0 0 / 200% 100%;
 -webkit-background-clip: text;
 background-clip: text;
 animation: up .9s cubic-bezier(.2,.8,.2,1) forwards, sh 5s linear 1.8s infinite;
