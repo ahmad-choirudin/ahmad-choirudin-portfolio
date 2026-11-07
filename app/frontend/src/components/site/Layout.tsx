@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <CursorLayer />
       <PageTransition />
       <SiteNav />
-      <main id="main" key={path} tabIndex={-1} className="min-h-[70svh] focus:outline-none">
+      <main id="main" key={path} tabIndex={-1} className="min-h-[70svh] overflow-x-clip focus:outline-none">
         {children}
       </main>
       <SiteFooter />
