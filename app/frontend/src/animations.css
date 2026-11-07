@@ -101,7 +101,7 @@
   --glow-1: 99 102 241;   /* indigo */
   --glow-2: 34 211 238;   /* cyan */
   --glow-3: 168 85 247;   /* ungu */
-  --glow-alpha: 1;        /* kekuatan cahaya: 0 = mati, 1 = normal */
+  --glow-alpha: 0;        /* kekuatan cahaya: 0 = mati, 1 = normal */
 }
 html[data-theme="light"] { --glow-alpha: .55; }
 
