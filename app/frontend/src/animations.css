@@ -128,9 +128,9 @@ body::before {
 
 /* Glow versi hangat: senada kulit dan latar gelap di foto */
 :root {
-  --glow-1: 196 128 76;   /* perunggu hangat */
-  --glow-2: 110 118 135;  /* abu kebiruan redup */
-  --glow-3: 140 98 70;    /* cokelat */
+  --glow-1: 255 255 255;
+  --glow-2: 200 200 210;
+  --glow-3: 160 160 170;
 }
 body::before {
   background:
