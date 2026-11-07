@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { usePath } from "@/router";
 import SiteNav from "./SiteNav";
 import CursorLayer from "./CursorLayer";
+import PageTransition from "./PageTransition";
 import SiteFooter from "./SiteFooter";
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -15,8 +16,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <CursorLayer />
+      <PageTransition />
       <SiteNav />
-      <main id="main" key={path} tabIndex={-1} className="page-enter min-h-[70svh] focus:outline-none">
+      <main id="main" key={path} tabIndex={-1} className="min-h-[70svh] focus:outline-none">
         {children}
       </main>
       <SiteFooter />
