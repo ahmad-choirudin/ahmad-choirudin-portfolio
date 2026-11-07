@@ -23,6 +23,7 @@ export default function Introduction() {
               practical frontend projects to strengthen my skills in creating
               modern web experiences.
             </p>
+
             <p>
               I value clear communication, attention to detail, and continuous
               learning. I’m interested in contributing to remote teams working
@@ -40,7 +41,10 @@ export default function Introduction() {
         </div>
       </div>
 
-      <div data-reveal className="mt-16 border-t border-line pt-10 md:mt-24 md:pt-12">
+      <div
+        data-reveal
+        className="mt-16 border-t border-line pt-10 md:mt-24 md:pt-12"
+      >
         <StatsCounter />
       </div>
     </Section>
