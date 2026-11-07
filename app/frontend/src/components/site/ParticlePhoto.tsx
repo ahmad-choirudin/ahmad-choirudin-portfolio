@@ -47,23 +47,21 @@ export default function ParticlePhoto({
       onDoneRef.current();
     };
 
-    // Respect reduced motion preferences.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       finish();
       return;
     }
 
     const isMobile = window.innerWidth < 768;
-
-    // Larger spacing means fewer particles.
     const step = isMobile ? 9 : 7;
+    const maxParticles = isMobile ? 1800 : 3200;
 
     const img = new Image();
     img.decoding = "async";
 
-    img.onerror = () => {
-      finish();
-    };
+    img.onerror = finish;
 
     img.onload = () => {
       if (dead) return;
@@ -72,7 +70,6 @@ export default function ParticlePhoto({
       const w = Math.floor(rect.width);
       const h = Math.floor(rect.height);
 
-      // Avoid invalid canvas dimensions.
       if (!w || !h || !img.width || !img.height) {
         finish();
         return;
@@ -85,9 +82,7 @@ export default function ParticlePhoto({
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Create an offscreen canvas for pixel sampling.
       const offscreen = document.createElement("canvas");
-
       offscreen.width = w;
       offscreen.height = h;
 
@@ -100,7 +95,6 @@ export default function ParticlePhoto({
         return;
       }
 
-      // Match object-cover behavior.
       const scale = Math.max(
         w / img.width,
         h / img.height
@@ -120,31 +114,22 @@ export default function ParticlePhoto({
       let pixels: Uint8ClampedArray;
 
       try {
-        pixels = offCtx.getImageData(
-          0,
-          0,
-          w,
-          h
-        ).data;
+        pixels = offCtx.getImageData(0, 0, w, h).data;
       } catch {
         finish();
         return;
       }
 
+      let stride = step;
+
+      while (
+        Math.ceil(w / stride) * Math.ceil(h / stride) >
+        maxParticles
+      ) {
+        stride++;
+      }
+
       const particles: Particle[] = [];
-
-      // Limit particle count to protect lower-end devices.
-      const maxParticles = isMobile ? 1800 : 3200;
-
-      const estimatedCount =
-        Math.ceil(w / step) * Math.ceil(h / step);
-
-      const samplingStep =
-        estimatedCount > maxParticles
-          ? step * Math.sqrt(estimatedCount / maxParticles)
-          : step;
-
-      const stride = Math.max(step, Math.floor(samplingStep));
 
       for (let y = 0; y < h; y += stride) {
         for (let x = 0; x < w; x += stride) {
@@ -153,22 +138,17 @@ export default function ParticlePhoto({
           if (pixels[i + 3] < 10) continue;
 
           const angle = Math.random() * Math.PI * 2;
-
           const distance =
             Math.max(w, h) * (0.6 + Math.random() * 0.6);
 
           particles.push({
             hx: x,
             hy: y,
-
             x: w / 2 + Math.cos(angle) * distance,
             y: h / 2 + Math.sin(angle) * distance,
-
             vx: 0,
             vy: 0,
-
             delay: Math.random() * 700,
-
             c: `rgb(${pixels[i]},${pixels[i + 1]},${pixels[i + 2]})`,
           });
         }
@@ -180,7 +160,6 @@ export default function ParticlePhoto({
       }
 
       const startTime = performance.now();
-
       let doneAt = 0;
 
       const loop = () => {
@@ -217,7 +196,6 @@ export default function ParticlePhoto({
           }
 
           ctx.fillStyle = particle.c;
-
           ctx.fillRect(
             particle.x,
             particle.y,
@@ -226,15 +204,15 @@ export default function ParticlePhoto({
           );
         }
 
-        // Finish once particles settle or the maximum duration is reached.
-        if (!doneAt && ((elapsed > 800 && moving === 0) || elapsed > 3500)) {
+        if (
+          !doneAt &&
+          ((elapsed > 800 && moving === 0) || elapsed > 3500)
+        ) {
           doneAt = elapsed;
           finish();
         }
 
-        // Allow a short visual hold before stopping.
         if (doneAt && elapsed > doneAt + 900) {
-          cancelAnimationFrame(raf);
           raf = 0;
           return;
         }
@@ -252,6 +230,7 @@ export default function ParticlePhoto({
 
       if (raf) {
         cancelAnimationFrame(raf);
+        raf = 0;
       }
 
       img.onload = null;
