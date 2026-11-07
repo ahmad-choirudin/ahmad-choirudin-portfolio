@@ -15,23 +15,20 @@ export default function Hero() {
   const [done, setDone] = useState(false);
   const handleDone = useCallback(() => setDone(true), []);
 
-  // Jaring pengaman: foto asli selalu muncul meski animasi partikel gagal.
   useEffect(() => {
-    const t = window.setTimeout(() => setDone(true), 5000);
-    return () => window.clearTimeout(t);
+    const timeout = window.setTimeout(() => setDone(true), 5000);
+    return () => window.clearTimeout(timeout);
   }, []);
 
   return (
     <section className="relative isolate flex min-h-[88svh] items-center overflow-hidden pt-16">
       <NetworkBackground />
 
-      {/* Cahaya aksen di belakang foto */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 top-1/4 -z-10 h-[28rem] w-[28rem] rounded-full bg-accent/10 blur-3xl"
       />
 
-      {/* Foto: partikel berkumpul, lalu crossfade ke foto asli */}
       <div className="absolute inset-y-0 right-0 w-full md:w-1/2">
         <div className="hero-photo relative h-full w-full">
           <img
@@ -39,10 +36,15 @@ export default function Hero() {
             alt="Ahmad Choirudin"
             width={1024}
             height={1280}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            draggable={false}
             className={`h-full w-full object-cover object-[center_20%] transition-opacity duration-700 ${
               done ? "opacity-70 md:opacity-100" : "opacity-0"
             }`}
           />
+
           <ParticlePhoto
             src={site.heroImage}
             onDone={handleDone}
@@ -51,11 +53,9 @@ export default function Hero() {
             }`}
           />
         </div>
-        {/* HP: gelap merata supaya teks terbaca */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-bg/30 md:hidden" />
-        {/* Desktop: pudar ke kiri supaya tepi foto menyatu dengan latar */}
         <div className="absolute inset-0 hidden bg-gradient-to-r from-bg via-bg/30 to-transparent md:block md:w-2/3" />
-        {/* Pudar ke bawah supaya menyatu dengan marquee */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
       </div>
 
@@ -94,7 +94,12 @@ export default function Hero() {
               className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-bg transition hover:-translate-y-0.5 hover:shadow-[0_10px_26px_-10px_rgb(var(--accent-rgb)/0.7)]"
             >
               Explore My Work
-              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+              <span
+                aria-hidden="true"
+                className="transition-transform group-hover:translate-x-1"
+              >
+                →
+              </span>
             </a>
 
             <a
