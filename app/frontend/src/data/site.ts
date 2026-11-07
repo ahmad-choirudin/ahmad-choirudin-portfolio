@@ -8,7 +8,7 @@ export const site = {
   nav: [
     { label: "Home", to: "/home" },
     { label: "Work", to: "/work" },
-    { label: "About", to: "/about" },
+    { label: "Experience", to: "/about" },
     { label: "Credentials", to: "/credentials" },
     { label: "Contact", to: "/contact" },
   ],
