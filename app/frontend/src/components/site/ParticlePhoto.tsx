@@ -23,153 +23,237 @@ export default function ParticlePhoto({
   className = "",
 }: ParticlePhotoProps) {
   const ref = useRef<HTMLCanvasElement>(null);
-  // Callback disimpan di ref supaya effect tidak diulang saat parent re-render.
   const onDoneRef = useRef(onDone);
+
   useEffect(() => {
     onDoneRef.current = onDone;
   }, [onDone]);
 
   useEffect(() => {
-    const cv = ref.current;
-    if (!cv) return;
+    const canvas = ref.current;
+    if (!canvas) return;
 
-    const ctx = cv.getContext("2d");
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      onDoneRef.current();
-      return;
-    }
-
-    const step = window.innerWidth < 768 ? 8 : 6;
 
     let raf = 0;
     let dead = false;
+    let completed = false;
+
+    const finish = () => {
+      if (dead || completed) return;
+
+      completed = true;
+      onDoneRef.current();
+    };
+
+    // Respect reduced motion preferences.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finish();
+      return;
+    }
+
+    const isMobile = window.innerWidth < 768;
+
+    // Larger spacing means fewer particles.
+    const step = isMobile ? 9 : 7;
 
     const img = new Image();
-    // Jika gambar gagal dimuat, tetap lepas foto asli supaya hero tidak kosong.
+    img.decoding = "async";
+
     img.onerror = () => {
-      if (!dead) onDoneRef.current();
+      finish();
     };
-    img.src = src;
 
     img.onload = () => {
       if (dead) return;
 
-      const r = cv.getBoundingClientRect();
-      const w = r.width;
-      const h = r.height;
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.floor(rect.width);
+      const h = Math.floor(rect.height);
+
+      // Avoid invalid canvas dimensions.
+      if (!w || !h || !img.width || !img.height) {
+        finish();
+        return;
+      }
+
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      cv.width = w * dpr;
-      cv.height = h * dpr;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Gambar foto ala object-cover (fokus 20% dari atas), lalu ambil warnanya
-      const off = document.createElement("canvas");
-      off.width = Math.ceil(w);
-      off.height = Math.ceil(h);
+      // Create an offscreen canvas for pixel sampling.
+      const offscreen = document.createElement("canvas");
 
-      const oc = off.getContext("2d", {
+      offscreen.width = w;
+      offscreen.height = h;
+
+      const offCtx = offscreen.getContext("2d", {
         willReadFrequently: true,
       });
 
-      if (!oc) return;
+      if (!offCtx) {
+        finish();
+        return;
+      }
 
-      const s = Math.max(w / img.width, h / img.height);
-
-      oc.drawImage(
-        img,
-        (w - img.width * s) / 2,
-        (h - img.height * s) * 0.2,
-        img.width * s,
-        img.height * s
+      // Match object-cover behavior.
+      const scale = Math.max(
+        w / img.width,
+        h / img.height
       );
 
-      const px = oc.getImageData(
-        0,
-        0,
-        off.width,
-        off.height
-      ).data;
+      const drawWidth = img.width * scale;
+      const drawHeight = img.height * scale;
+
+      offCtx.drawImage(
+        img,
+        (w - drawWidth) / 2,
+        (h - drawHeight) * 0.2,
+        drawWidth,
+        drawHeight
+      );
+
+      let pixels: Uint8ClampedArray;
+
+      try {
+        pixels = offCtx.getImageData(
+          0,
+          0,
+          w,
+          h
+        ).data;
+      } catch {
+        finish();
+        return;
+      }
 
       const particles: Particle[] = [];
 
-      for (let y = 0; y < h; y += step) {
-        for (let x = 0; x < w; x += step) {
-          const i = (Math.floor(y) * off.width + Math.floor(x)) * 4;
+      // Limit particle count to protect lower-end devices.
+      const maxParticles = isMobile ? 1800 : 3200;
 
-          if (px[i + 3] < 10) continue;
+      const estimatedCount =
+        Math.ceil(w / step) * Math.ceil(h / step);
 
-          const a = Math.random() * Math.PI * 2;
-          const d =
+      const samplingStep =
+        estimatedCount > maxParticles
+          ? step * Math.sqrt(estimatedCount / maxParticles)
+          : step;
+
+      const stride = Math.max(step, Math.floor(samplingStep));
+
+      for (let y = 0; y < h; y += stride) {
+        for (let x = 0; x < w; x += stride) {
+          const i = (y * w + x) * 4;
+
+          if (pixels[i + 3] < 10) continue;
+
+          const angle = Math.random() * Math.PI * 2;
+
+          const distance =
             Math.max(w, h) * (0.6 + Math.random() * 0.6);
 
           particles.push({
             hx: x,
             hy: y,
-            x: w / 2 + Math.cos(a) * d,
-            y: h / 2 + Math.sin(a) * d,
+
+            x: w / 2 + Math.cos(angle) * distance,
+            y: h / 2 + Math.sin(angle) * distance,
+
             vx: 0,
             vy: 0,
+
             delay: Math.random() * 700,
-            c: `rgb(${px[i]},${px[i + 1]},${px[i + 2]})`,
+
+            c: `rgb(${pixels[i]},${pixels[i + 1]},${pixels[i + 2]})`,
           });
         }
       }
 
-      const t0 = performance.now();
+      if (!particles.length) {
+        finish();
+        return;
+      }
+
+      const startTime = performance.now();
+
       let doneAt = 0;
 
       const loop = () => {
         if (dead) return;
 
-        raf = requestAnimationFrame(loop);
-
-        const t = performance.now() - t0;
+        const elapsed = performance.now() - startTime;
 
         ctx.clearRect(0, 0, w, h);
 
         let moving = 0;
 
-        for (const p of particles) {
-          if (t > p.delay) {
-            p.vx = (p.vx + (p.hx - p.x) * 0.04) * 0.86;
-            p.vy = (p.vy + (p.hy - p.y) * 0.04) * 0.86;
+        for (const particle of particles) {
+          if (elapsed > particle.delay) {
+            particle.vx =
+              (particle.vx +
+                (particle.hx - particle.x) * 0.04) *
+              0.86;
 
-            p.x += p.vx;
-            p.y += p.vy;
+            particle.vy =
+              (particle.vy +
+                (particle.hy - particle.y) * 0.04) *
+              0.86;
+
+            particle.x += particle.vx;
+            particle.y += particle.vy;
           }
 
-          if (
-            Math.abs(p.hx - p.x) +
-            Math.abs(p.hy - p.y) >
-            0.5
-          ) {
+          const distance =
+            Math.abs(particle.hx - particle.x) +
+            Math.abs(particle.hy - particle.y);
+
+          if (distance > 0.5) {
             moving++;
           }
 
-          ctx.fillStyle = p.c;
-          ctx.fillRect(p.x, p.y, step, step);
+          ctx.fillStyle = particle.c;
+
+          ctx.fillRect(
+            particle.x,
+            particle.y,
+            stride,
+            stride
+          );
         }
 
-        if (!doneAt && ((t > 800 && !moving) || t > 3500)) {
-          doneAt = t;
-          onDoneRef.current();
+        // Finish once particles settle or the maximum duration is reached.
+        if (!doneAt && ((elapsed > 800 && moving === 0) || elapsed > 3500)) {
+          doneAt = elapsed;
+          finish();
         }
 
-        if (doneAt && t > doneAt + 900) {
+        // Allow a short visual hold before stopping.
+        if (doneAt && elapsed > doneAt + 900) {
           cancelAnimationFrame(raf);
+          raf = 0;
+          return;
         }
+
+        raf = requestAnimationFrame(loop);
       };
 
-      loop();
+      raf = requestAnimationFrame(loop);
     };
+
+    img.src = src;
 
     return () => {
       dead = true;
-      cancelAnimationFrame(raf);
+
+      if (raf) {
+        cancelAnimationFrame(raf);
+      }
+
       img.onload = null;
       img.onerror = null;
     };
@@ -183,4 +267,3 @@ export default function ParticlePhoto({
     />
   );
 }
-  
