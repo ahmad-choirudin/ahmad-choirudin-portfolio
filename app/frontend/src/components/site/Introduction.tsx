@@ -5,7 +5,7 @@ import DotPortrait from "./DotPortrait";
 
 export default function Introduction() {
   return (
-    <Section id="about">
+    <Section id="about" className="pb-10 md:pb-12">
       <div className="grid gap-12 md:grid-cols-12 md:gap-16">
         <div data-reveal className="md:col-span-7">
           <SectionHeading index="02" eyebrow="About" title="About Me" />
