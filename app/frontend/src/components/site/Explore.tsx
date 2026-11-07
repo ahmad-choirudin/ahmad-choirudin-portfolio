@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 
 const links = [
   { to: "/work", title: "Work", text: "Selected projects across Web3, dashboards, and marketplaces." },
-  { to: "/about", title: "About & Experience", text: "My background, expertise, and the way I work." },
+  { to: "/about", title: "Experience", text: "My background, expertise, and the way I work." },
   { to: "/credentials", title: "Credentials", text: "Blockchain certificates from Avalanche, Rise In, and Starknet." },
   { to: "/contact", title: "Contact", text: "Questions, collaborations, or just to say hi." },
 ];
