@@ -3,7 +3,7 @@ export const site = {
   role: "Independent Digital Professional · Indonesia",
   heroImage: "/hero.webp",
   email: "ahmadchoirudin86@gmail.com",
-  whatsapp: "+6285739409304",
+  whatsapp: "6285739409304",
 
   nav: [
     { label: "Home", to: "/home" },
