@@ -1,0 +1,144 @@
+{
+  "issuers": {
+    "avalanche": {
+      "name": "Avalanche Academy",
+      "sub": "Blockchain Development"
+    },
+    "risein": {
+      "name": "Rise In",
+      "sub": "Smart Contract Development"
+    },
+    "starknet": {
+      "name": "Starknet",
+      "sub": "Starknet Development"
+    }
+  },
+  "certificates": [
+    {
+      "issuer": "avalanche",
+      "title": "Avalanche Fundamentals",
+      "learned": "How Avalanche works: its consensus mechanism, the Primary Network, Virtual Machines, and how Avalanche L1s enable scalable, customizable blockchains.",
+      "href": "https://drive.google.com/file/d/1xC1pNldmn3j1M3NLVc5VFn35M-vBbxo2/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Blockchain Fundamentals",
+      "learned": "Core blockchain concepts: payments, cryptography, digital signatures, consensus, Sybil defense, smart contracts, tokenomics, and virtual machines.",
+      "href": "https://drive.google.com/file/d/1UNt0gZSkaBKDpIJ1wlyeJGNInS-830JQ/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Permissioned L1s",
+      "learned": "Creating and managing permissioned L1s on Avalanche with Proof of Authority, validator manager contracts, and multi-signature governance.",
+      "href": "https://drive.google.com/file/d/1QDv_X9NjGT9h4DNHG9kOoURizx2OGEJ5/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "L1 Native Tokenomics",
+      "learned": "Creating native tokens on an Avalanche L1, plus distribution, vesting, bonding curves, airdrops, and governance models like DAOs and quadratic voting.",
+      "href": "https://drive.google.com/file/d/1--1O6AcodCFJsP0HY0wMvlG_z3pg0zq-/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Permissionless L1s",
+      "learned": "Building permissionless L1s with Proof of Stake: staking, validator management, delegation, staking manager setup, and node licenses.",
+      "href": "https://drive.google.com/file/d/1m_lISDO92NUj2Z8UMmxAqx68aydpx8aq/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Interchain Messaging",
+      "learned": "Cross-chain communication on Avalanche with ICM, Warp Messaging, Teleporter, and relayers to send messages between L1s.",
+      "href": "https://drive.google.com/file/d/1I5kz7GVLs82LmCcYqOP9Lm04AxHSMu2X/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "ERC-20 Bridge",
+      "learned": "Bridging ERC-20 tokens between L1s with Interchain Token Transfer, covering bridge architecture, security risks, and TokenHome/TokenRemote contracts.",
+      "href": "https://drive.google.com/file/d/1PpttVw_FVSnrgjrH_iP4PSFgOfCA5wZF/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Native Token Bridge",
+      "learned": "Bridging native tokens with ICTT, using ERC-20 tokens or AVAX as an L1 gas token, and understanding collateralization and TokenHome/TokenRemote contracts.",
+      "href": "https://drive.google.com/file/d/16pGxHQBwZrlCGFm6SvTscIUBsMkltHa7/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Customizing the EVM",
+      "learned": "Customizing the EVM with precompiles to build specialized chains, including custom hash functions, calculators, and stateful counters.",
+      "href": "https://drive.google.com/file/d/1YXi87zdR5AN_wIVbYPWHBpUei2nHnGle/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Access Restriction Fundamentals",
+      "learned": "Controlling access on Avalanche L1s with precompiles and allowlists: restricting transactions and deployments, managing admins, and recovering from config errors through network upgrades.",
+      "href": "https://drive.google.com/file/d/1tXIRTRZrrRWlJvY29YxdPaUIMRBslVg7/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Solidity Programming with Foundry",
+      "learned": "Solidity basics for building dApps on Avalanche, from contract structure, inheritance, and events to token standards, deployed and tested with Foundry.",
+      "href": "https://drive.google.com/file/d/1E92SfSrVN8KbKKojEuzOsGLqJXkP-nXs/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "x402 Payment Infrastructure",
+      "learned": "The x402 protocol for instant, permissionless HTTP payments on Avalanche: payment flows, facilitators, API monetization, and middleware for micropayments and AI agent payments.",
+      "href": "https://drive.google.com/file/d/1poWmVSZu_VkjILn4TKH2TWZtWeyceahZ/view?usp=drivesdk"
+    },
+    {
+      "issuer": "avalanche",
+      "title": "Encrypted ERC",
+      "learned": "The eERC standard for private transactions on EVM chains: zero-knowledge proofs, homomorphic encryption, and confidential transfers, balanced with regulatory compliance.",
+      "href": "https://drive.google.com/file/d/1rM8w-dKbojE_9VaL13byDuMa6Zl_H7Ms/view?usp=drivesdk"
+    },
+    {
+      "issuer": "risein",
+      "title": "Learn everything about Solana",
+      "learned": "Solana fundamentals: transactions, instructions, accounts, and PDAs, plus building and deploying Rust programs including a counter, a token transfer, and a restaurant review dApp with a frontend.",
+      "href": "https://www.risein.com/certificates/FsTDwzqy"
+    },
+    {
+      "issuer": "risein",
+      "title": "Learn everything about Solidity",
+      "learned": "Solidity and Ethereum smart contract basics in Remix: counter and proposal contracts, constructors, OnlyOwner access control, and a voting final project.",
+      "href": "https://www.risein.com/certificates/SBAjAkFN"
+    },
+    {
+      "issuer": "risein",
+      "title": "Build on BNB Chain | BNB Chain Fundamentals",
+      "learned": "BNB Chain fundamentals: the EVM model, how the chain works, the role of wallets, zkBNB, and using Trust Wallet and MetaMask with BNB Smart Chain.",
+      "href": "https://www.risein.com/certificates/xthH946h"
+    },
+    {
+      "issuer": "risein",
+      "title": "Build on BNB Chain | Solidity for BNB Chain Development",
+      "learned": "Solidity for BNB Chain in Remix: data types, functions, mappings, structs, modifiers, events, error handling, libraries, and inheritance, applied in a final project.",
+      "href": "https://www.risein.com/certificates/4AIiCv3d"
+    },
+    {
+      "issuer": "risein",
+      "title": "Build on BNB Chain | Smart Contract and dApp Development On BNB Chain",
+      "learned": "Building dApps on BNB Chain end to end: environment setup, writing and testing contracts, and a full-stack car rental app connecting contracts to a frontend.",
+      "href": "https://www.risein.com/certificates/rVeojADP"
+    },
+    {
+      "issuer": "starknet",
+      "title": "Starknet Smart Contracts",
+      "learned": "Writing Starknet smart contracts in Cairo: storage, constructors, events, OpenZeppelin access control, and cross-contract calls such as balance checks, allowances, and payments.",
+      "href": "https://mycourse.app/UU6YrgDbDtJu9lpst"
+    },
+    {
+      "issuer": "starknet",
+      "title": "Testing with Starknet Foundry",
+      "learned": "Automating contract tests with Starknet Foundry: state changes, events, errors, access control, and ERC-20 payments using cheatcodes and event spies.",
+      "href": "https://mycourse.app/GpUYpae4pDTKBNfij"
+    },
+    {
+      "issuer": "starknet",
+      "title": "Creating a Web3 Startup",
+      "learned": "Validating a Web3 startup idea: finding target customers, testing demand cheaply, planning go-to-market, and building a pitch for investors.",
+      "href": "https://mycourse.app/rF3DQeLewedYvDt4o"
+    }
+  ]
+}
