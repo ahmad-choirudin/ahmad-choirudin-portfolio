@@ -32,6 +32,9 @@ html[data-theme="light"] {
   html {
     scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
+    /* FIX: elemen reveal yang miring/bergeser (rotateY, translateX) di awal
+       memperlebar area scroll, lalu Chrome Android zoom-out. `clip` memotong
+       luapan horizontal tanpa membuat scroll container (sticky tetap aman). */
     overflow-x: clip;
     max-width: 100%;
   }
@@ -42,6 +45,7 @@ html[data-theme="light"] {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* FIX: sama seperti html, untuk browser yang hanya membaca dari body */
     overflow-x: clip;
     max-width: 100%;
   }
@@ -49,6 +53,19 @@ html[data-theme="light"] {
   p { text-wrap: pretty; }
   ::selection { background: rgb(var(--accent-rgb) / .9); color: var(--bg); }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+}
+
+/* Latar dot grid: bintik halus yang memudar ke bawah, ikut warna tema */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgb(var(--fg-rgb) / 0.2) 1px, transparent 1.6px);
+  background-size: 20px 20px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 0%, #000 25%, transparent 100%);
+  mask-image: radial-gradient(ellipse 90% 75% at 50% 0%, #000 25%, transparent 100%);
 }
 
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
