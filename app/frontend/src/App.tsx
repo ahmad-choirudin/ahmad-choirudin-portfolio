@@ -10,6 +10,8 @@ import NotFound from "@/pages/NotFound";
 function Routes() {
   switch (usePath()) {
     case "/":
+    case "/home":
+    case "/index.html":
       return <Home />;
     case "/work":
       return <Work />;
