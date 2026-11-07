@@ -1,6 +1,5 @@
 export type Project = {
   image: string;
-  /** Dipakai untuk URL halaman case study: /work/<slug>. Harus unik, huruf kecil, tanpa spasi. */
   slug: string;
   title: string;
   category: string;
@@ -9,11 +8,8 @@ export type Project = {
   tools: string;
   demo: string;
   github: string;
-  /** Opsional — tampil di halaman case study hanya jika diisi. */
   role?: string;
-  /** Opsional — daftar poin hasil/fitur utama. */
   highlights?: string[];
-  /** Opsional — gambar tambahan (letakkan file di public/projects/). */
   gallery?: { src: string; alt: string }[];
 };
 
@@ -28,6 +24,12 @@ export const projects: Project[] = [
     tools: "React, TypeScript, Tailwind CSS",
     demo: "https://www.cubbienft.my.id/",
     github: "https://github.com/ahmad-choirudin/cubbie-nft-market",
+    highlights: [
+      "Digital collectibles marketplace concept focused on ownership and collectible culture.",
+      "Distinctive visual identity designed for a modern Web3 environment.",
+      "Clean marketplace experience with a refined interface.",
+      "Frontend technology stack built with React, TypeScript, and Tailwind CSS.",
+    ],
   },
   {
     image: "/projects/web3-research-os.webp",
@@ -39,6 +41,14 @@ export const projects: Project[] = [
     tools: "React, Vite, TypeScript, Tailwind CSS, CoinGecko, DefiLlama",
     demo: "https://www.web3os.my.id/",
     github: "https://github.com/ahmad-choirudin/Web3-Research-OS",
+    highlights: [
+      "Live cryptocurrency market data and price movement monitoring.",
+      "DeFi protocol insights to support ecosystem research.",
+      "Crypto news discovery in one centralized workspace.",
+      "Wallet balance monitoring.",
+      "Unified research workflow for exploring the Web3 ecosystem.",
+      "Integration with CoinGecko and DefiLlama.",
+    ],
   },
   {
     image: "/projects/airdrop-tracker.webp",
@@ -46,9 +56,15 @@ export const projects: Project[] = [
     title: "CUBBIE Airdrop Tracker",
     category: "Dashboard",
     period: "Web3 Tracker · Dashboard",
-    text: "A clean and simple web3 dashboard that helps you track, manage, and stay updated on airdrop opportunities across multiple projects, all in one place.",
+    text: "A clean and simple Web3 dashboard that helps users track, manage, and stay updated on airdrop opportunities across multiple projects, all in one place.",
     tools: "React, Vite, Tailwind CSS, Lucide React, Python",
     demo: "https://www.dropwatch.web.id/",
     github: "https://github.com/ahmad-choirudin/airdrop-tracker",
+    highlights: [
+      "Centralized tracking of airdrop opportunities across multiple projects.",
+      "A dashboard interface designed to organize airdrop information.",
+      "A simple workflow for managing and following opportunities.",
+      "Built with React, Vite, Tailwind CSS, Lucide React, and Python.",
+    ],
   },
 ];
