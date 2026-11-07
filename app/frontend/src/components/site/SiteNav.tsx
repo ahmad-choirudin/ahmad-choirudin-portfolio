@@ -1,5 +1,5 @@
-import { Home } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Home } from "lucide-react";
 import { site } from "@/data/site";
 import { usePath } from "@/router";
 import ScrambleText from "./ScrambleText";
@@ -11,7 +11,7 @@ import { Container } from "./Section";
 export default function SiteNav() {
   const [open, setOpen] = useState(false);
   const path = usePath();
-  const isActive = (to: string) => path === to || path.startsWith(`${to}/`);
+  const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
   useEffect(() => {
     if (!open) return;
@@ -46,8 +46,19 @@ export default function SiteNav() {
             </a>
           ))}
         </nav>
-        
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href="/"
+            aria-label="Home"
+            aria-current={path === "/" ? "page" : undefined}
+            onClick={() => setOpen(false)}
+            className={`grid h-10 w-10 place-items-center rounded-full border transition-colors md:hidden ${
+              path === "/" ? "border-accent text-accent" : "border-line text-muted hover:text-accent"
+            }`}
+          >
+            <Home className="h-4 w-4" aria-hidden="true" />
+          </a>
           <ThemeToggle />
           <div className="hidden sm:block">
             <Magnetic>
