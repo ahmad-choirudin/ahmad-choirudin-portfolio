@@ -10,7 +10,7 @@ const links = [
 
 export default function Explore() {
   return (
-    <Section id="explore">
+    <Section id="explore" className="pt-10 md:pt-12">
       <SectionHeading eyebrow="Explore" title="Explore the Site" />
       <ul className="mt-12 grid gap-4 sm:grid-cols-2">
         {links.map((l, i) => (
