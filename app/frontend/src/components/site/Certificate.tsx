@@ -11,8 +11,8 @@ function Lightbox({ cert, onClose }: { cert: Cert; onClose: () => void }) {
 
   useEffect(() => {
     closeBtn.current?.focus();
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const prevOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -37,7 +37,7 @@ function Lightbox({ cert, onClose }: { cert: Cert; onClose: () => void }) {
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
+      document.documentElement.style.overflow = prevOverflow;
     };
   }, [onClose]);
 
