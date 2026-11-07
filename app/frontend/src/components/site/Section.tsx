@@ -13,7 +13,7 @@ type SectionProps = {
 
 export default function Section({ id, tight = false, className = "", children }: SectionProps) {
   return (
-    <section id={id} className={`relative ${tight ? "py-12 md:py-16" : "py-20 md:py-28"} ${className}`}>
+    <section id={id} className={`relative ${tight ? "py-8 md:py-12" : "py-12 md:py-16"} ${className}`}>
       <Container>{children}</Container>
     </section>
   );
