@@ -1,3 +1,4 @@
+import { Home } from "lucide-react";
 import { useEffect, useState } from "react";
 import { site } from "@/data/site";
 import { usePath } from "@/router";
@@ -6,7 +7,6 @@ import Magnetic from "./Magnetic";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import { Container } from "./Section";
-import { Home } from "lucide-react";
 
 export default function SiteNav() {
   const [open, setOpen] = useState(false);
