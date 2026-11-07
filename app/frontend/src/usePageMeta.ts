@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { usePath } from "@/router";
-
-const SITE_URL = "https://www.ahmadchoirudin.my.id";
+import { SITE_URL } from "@/config/seo";
 
 const set = (selector: string, attr: string, value: string) =>
   document.head.querySelector(selector)?.setAttribute(attr, value);
 
-// Mengatur judul, deskripsi, dan canonical sesuai halaman yang sedang dibuka.
-export function usePageMeta(title: string, description: string) {
+// Mengatur judul, deskripsi, dan canonical sesuai halaman yang sedang dibuka (navigasi di browser).
+// Untuk crawler, versi statis tiap route dibuat saat build oleh plugins/seo.ts dari data yang sama.
+export function usePageMeta({ title, description }: { title: string; description: string }) {
   const path = usePath();
   useEffect(() => {
     document.title = title;

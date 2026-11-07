@@ -13,3 +13,7 @@
 - [CUBBIE NFT Marketplace](https://www.cubbienft.my.id/): NFT marketplace frontend built with React, TypeScript, and Tailwind CSS.
 - [CUBBIE Web3 Research OS](https://www.web3os.my.id/): Web3 research dashboard with live market data, DeFi insights, and wallet monitoring.
 - [CUBBIE Airdrop Tracker](https://www.dropwatch.web.id/): Dashboard for tracking and managing airdrop opportunities.
+
+## Full profile
+
+- [llms-full.txt](https://www.ahmadchoirudin.my.id/llms-full.txt): experience, expertise, all projects, and FAQ in plain text.

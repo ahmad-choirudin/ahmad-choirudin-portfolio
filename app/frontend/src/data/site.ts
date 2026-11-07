@@ -6,7 +6,7 @@ export const site = {
   whatsapp: "6285739409304",
 
   nav: [
-    { label: "Home", to: "/home" },
+    { label: "Home", to: "/" },
     { label: "Work", to: "/work" },
     { label: "Experience", to: "/about" },
     { label: "Credentials", to: "/credentials" },

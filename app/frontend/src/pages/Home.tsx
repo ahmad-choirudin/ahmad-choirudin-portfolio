@@ -3,12 +3,10 @@ import Marquee from "@/components/site/Marquee";
 import Introduction from "@/components/site/Introduction";
 import Explore from "@/components/site/Explore";
 import { usePageMeta } from "@/usePageMeta";
+import { routes } from "@/config/seo";
 
 export default function Home() {
-  usePageMeta(
-    "Ahmad Choirudin — Web3, Frontend, Community & AI",
-    "Ahmad Choirudin — independent digital professional from Indonesia working across Web3, frontend, community, and AI data."
-  );
+  usePageMeta(routes["/"]);
   return (
     <>
       <Hero />

@@ -3,7 +3,7 @@ import Section from "@/components/site/Section";
 import { usePageMeta } from "@/usePageMeta";
 
 export default function NotFound() {
-  usePageMeta("Page not found — Ahmad Choirudin", "This page does not exist.");
+  usePageMeta({ title: "Page not found — Ahmad Choirudin", description: "This page does not exist." });
 
   useEffect(() => {
     const m = document.createElement("meta");

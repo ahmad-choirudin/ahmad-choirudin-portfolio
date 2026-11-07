@@ -5,5 +5,5 @@
     "skipLibCheck": true, "isolatedModules": true, "types": ["vite/client"],
     "baseUrl": ".", "paths": { "@/*": ["src/*"] }
   },
-  "include": ["src", "vite.config.ts", "tailwind.config.ts"]
+  "include": ["src", "plugins", "vite.config.ts", "tailwind.config.ts"]
 }
