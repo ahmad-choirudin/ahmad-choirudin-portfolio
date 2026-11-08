@@ -95,10 +95,10 @@ export default function Contact() {
           <p className="flex items-center gap-3 font-mono text-eyebrow font-medium uppercase text-accent">
             <span className="tabular-nums text-subtle">08</span>
             <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
-            Get in touch
+            <ScrambleText text="Get in touch" />
           </p>
           <h2 className="mt-6 font-display text-display-lg font-semibold text-fg">
-            Interested in working together? <span className="text-accent">Let’s talk.</span>
+          <TypewriterText text="Interested in working together? " accent="Let’s talk." delay={150} speed={40} />
           </h2>
         </div>
 
