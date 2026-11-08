@@ -124,4 +124,4 @@ export default function TypewriterText({
       </span>
     </span>
   );
-  }
+}
