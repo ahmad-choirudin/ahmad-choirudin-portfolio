@@ -70,8 +70,6 @@
   font-weight: 600;
   letter-spacing: -.02em;
   line-height: 1;
-  -webkit-text-stroke: 2px #B8F34A;
-  paint-order: stroke fill;
 }
 
 html[data-theme="light"] .page-curtain__name {
@@ -98,18 +96,16 @@ html[data-theme="light"] .page-curtain__name {
   .page-curtain { display: none; }
 }
 
-/* Animasi masuk saat pindah halaman */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   .page-enter { animation: page-in .35s ease both; }
 }
 
-/* Nuansa warna latar (aurora). Ubah warnanya lewat tiga variabel --glow-*. */
 :root {
-  --glow-1: 99 102 241;   /* indigo */
-  --glow-2: 34 211 238;   /* cyan */
-  --glow-3: 168 85 247;   /* ungu */
-  --glow-alpha: 0;        /* kekuatan cahaya: 0 = mati, 1 = normal */
+  --glow-1: 99 102 241;
+  --glow-2: 34 211 238; 
+  --glow-3: 168 85 247;
+  --glow-alpha: 0;
 }
 html[data-theme="light"] { --glow-alpha: .55; }
 
@@ -125,7 +121,6 @@ body::before {
     radial-gradient(45% 40% at 60% 90%, rgb(var(--glow-3) / calc(.16 * var(--glow-alpha))), transparent 70%);
 }
 
-/* Cahaya bergeser pelan, dimatikan kalau perangkat meminta gerakan dikurangi */
 @media (prefers-reduced-motion: no-preference) {
   body::before { animation: glow-drift 36s ease-in-out infinite alternate; }
   @keyframes glow-drift {
@@ -134,7 +129,6 @@ body::before {
   }
 }
 
-/* Glow versi hangat: senada kulit dan latar gelap di foto */
 :root {
   --glow-1: 255 255 255;
   --glow-2: 200 200 210;
@@ -147,9 +141,8 @@ body::before {
     radial-gradient(44% 38% at 55% 92%, rgb(var(--glow-3) / calc(.14 * var(--glow-alpha))), transparent 70%);
 }
 
-/* Animasi muncul ala buku: halaman terbuka dari "punggung" di sisi kiri */
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  /* Kartu dan blok isi: seperti halaman yang dibuka */
+  
   html [data-reveal] {
     transform: perspective(1100px) rotateY(-32deg) translateX(-14px);
     transform-origin: left center;
@@ -159,7 +152,6 @@ body::before {
   html [data-reveal].is-in { transform: none; }
   html [data-reveal="words"] { opacity: 1; transform: none; }
 
-  /* Judul section: tiap kata membuka seperti lembar buku */
   html .wd { overflow: visible; perspective: 700px; }
   html .wd > span {
     transform: rotateY(-70deg);
@@ -171,7 +163,6 @@ body::before {
   html .is-in .wd > span { transform: none; opacity: 1; }
 }
 
-/* Tilt + cahaya mengikuti kursor untuk kartu [data-tilt] (lihat hooks/useTilt.ts) */
 @media (prefers-reduced-motion: no-preference) and (pointer: fine) {
   [data-tilt] {
     position: relative;
