@@ -8,7 +8,7 @@ export default function Introduction() {
     <Section id="about" className="pb-10 md:pb-12">
       <div className="grid gap-12 md:grid-cols-12 md:gap-16">
         <div data-reveal className="md:col-span-7">
-          <SectionHeading index="02" eyebrow="About" title="About Me" />
+          <SectionHeading eyebrow="About" title="About Me" />
 
           <p className="mt-8 text-xl leading-8 text-fg md:text-2xl md:leading-9">
             I’m Ahmad Choirudin, a digital professional from Indonesia with

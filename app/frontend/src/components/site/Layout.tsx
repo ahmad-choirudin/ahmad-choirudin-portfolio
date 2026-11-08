@@ -6,6 +6,7 @@ import SiteNav from "./SiteNav";
 import CursorLayer from "./CursorLayer";
 import PageTransition from "./PageTransition";
 import SiteFooter from "./SiteFooter";
+import RouteAnnouncer from "./RouteAnnouncer";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const path = usePath();
@@ -19,6 +20,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
+      <RouteAnnouncer />
       <CursorLayer />
       <PageTransition />
       <SiteNav />

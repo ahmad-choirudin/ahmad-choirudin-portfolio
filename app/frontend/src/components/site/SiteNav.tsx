@@ -12,6 +12,11 @@ export default function SiteNav() {
   const path = usePath();
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
 
+  // Tutup menu mobile saat rute berubah, termasuk lewat tombol back/forward browser.
+  useEffect(() => {
+    setOpen(false);
+  }, [path]);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);

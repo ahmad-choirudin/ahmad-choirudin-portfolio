@@ -96,17 +96,7 @@ html[data-theme="light"] .page-curtain__name {
   .page-curtain { display: none; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .page-enter { animation: page-in .35s ease both; }
-}
-
-:root {
-  --glow-1: 99 102 241;
-  --glow-2: 34 211 238; 
-  --glow-3: 168 85 247;
-  --glow-alpha: 0;
-}
+:root { --glow-alpha: 0; }
 html[data-theme="light"] { --glow-alpha: .55; }
 
 body::before {
@@ -115,10 +105,6 @@ body::before {
   inset: -25%;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(40% 35% at 18% 20%, rgb(var(--glow-1) / calc(.22 * var(--glow-alpha))), transparent 70%),
-    radial-gradient(35% 30% at 85% 30%, rgb(var(--glow-2) / calc(.14 * var(--glow-alpha))), transparent 70%),
-    radial-gradient(45% 40% at 60% 90%, rgb(var(--glow-3) / calc(.16 * var(--glow-alpha))), transparent 70%);
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -6,7 +6,7 @@ import { faq } from "@/data/faq";
 export default function Faq() {
   return (
     <Section id="faq">
-      <SectionHeading index="07" eyebrow="FAQ" title="Questions" />
+      <SectionHeading eyebrow="FAQ" title="Questions" />
       <div className="mt-12 border-t border-line">
         {faq.map((f) => (
           <details key={f.q} data-reveal className="group border-b border-line">

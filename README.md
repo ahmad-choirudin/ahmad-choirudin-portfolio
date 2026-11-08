@@ -26,7 +26,7 @@
   <tr>
     <td width="50%">
       <strong>01 / DESIGN SYSTEM</strong><br />
-      Monochrome theme with dark and light modes and a single accent token. Colors, type scale, and spacing are defined once as design tokens.
+      Monochrome theme with dark and light modes and a single accent token. The theme follows the visitor's system preference until they pick one with the toggle. Colors, type scale, and spacing are defined once as design tokens.
     </td>
     <td width="50%">
       <strong>02 / SECTIONS AND ROUTES</strong><br />
@@ -50,7 +50,7 @@
     </td>
     <td width="50%">
       <strong>06 / ACCESSIBILITY</strong><br />
-      Respects <code>prefers-reduced-motion</code>, includes a skip link, keyboard-friendly mobile menu, and an accessible certificate viewer.
+      Respects <code>prefers-reduced-motion</code>, includes a skip link, a keyboard-friendly mobile menu, an accessible certificate viewer, and a route announcer that tells screen readers when the page changes and moves focus to the main content.
     </td>
   </tr>
   <tr>
@@ -167,13 +167,16 @@ app/frontend/
 | Certificates | `src/data/certificates.json`, then run `npm run certs` |
 | Page titles, descriptions, and social previews | `src/config/seo.ts` + `public/og-image.jpg` |
 | Logo and favicon | `public/logo.png`, `public/favicon.png` |
-| Colors | `src/index.css` (`:root` tokens) |
+| Colors | `src/index.css` (`:root` tokens, including `--danger-rgb` for form errors and `--accent-hi-rgb` for the headline shimmer) |
+| Theme default | `public/theme-init.js` (stored choice, then system preference, then dark) |
 | Background glow | `src/animations.css` (`--glow-alpha`, `0` turns it off) |
 | Grain texture | `src/index.css` (`html::after`, adjust `opacity`) |
 | Fonts and type scale | `tailwind.config.ts` + font link in `index.html` |
 | Animations | `src/index.css`, `src/animations.css` |
 
-Navigation items in `site.ts` must match section ids (lowercase): `work`, `about`, `experience`, `expertise`, `credentials`, `contact`.
+Navigation items in `site.ts` point to routes (`/`, `/work`, `/about`, `/credentials`, `/contact`). If you add a page, also add its `<Route>` in `src/App.tsx` and an entry in `src/config/seo.ts` so it gets its own title, sitemap entry, and static HTML.
+
+Section numbers (`01`, `02`, ...) are generated per page with a CSS counter, so reordering or adding sections never leaves gaps. Pass `numbered={false}` to `SectionHeading` to hide a number.
 
 ### Adding a project
 
@@ -247,6 +250,13 @@ cp .env.example .env
 On Vercel, add the same variable under **Settings → Environment Variables** and redeploy.
 
 The Content Security Policy in `vercel.json` only allows requests to `formspree.io`. If you use another service, add its domain to `connect-src` and `form-action`.
+
+## ◈ TROUBLESHOOTING
+
+- **Build fails with a JSX or `TypewriterText` error in `SelectWork.tsx`:** make sure the project title is rendered once, inside a single `<h3>`.
+- **`npm run certs --check` fails in CI:** you edited `certificates.json` without running `npm run certs`. Run it and commit `certificate.ts`.
+- **Contact form is blocked in the browser console:** the endpoint domain is missing from `connect-src` in `vercel.json`.
+- **Theme looks wrong on first visit:** clear `localStorage.theme`; a stored choice always wins over the system preference.
 
 ## ◈ DEPLOYMENT
 

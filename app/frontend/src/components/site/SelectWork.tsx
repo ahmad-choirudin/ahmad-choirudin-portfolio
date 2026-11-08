@@ -122,7 +122,6 @@ export default function SelectedWork() {
   return (
     <Section id="work">
       <SectionHeading
-        index="01"
         eyebrow="Work"
         title="Selected Work"
         note="Selected projects across Web3 research, frontend development, and digital products."
@@ -201,7 +200,6 @@ export default function SelectedWork() {
                   {project.period}
                 </p>
                 <h3 className="mt-5 font-display text-3xl font-semibold tracking-tight text-fg md:text-4xl"><LetterRise text={project.title} /></h3>
-                <TypewriterText text={project.title} speed={35} /></h3>
                 <p className="mt-5 line-clamp-4 text-base leading-7 text-muted">{project.text}</p>
                 <ul className="mt-6 flex flex-wrap gap-2" aria-label="Tools used">
                   {toolsOf(project).map((t) => (

@@ -42,7 +42,6 @@ export default function Timeline() {
       <div className="grid gap-12 md:grid-cols-12 md:gap-16">
         <div className="self-start md:sticky md:top-28 md:col-span-4">
           <SectionHeading
-            index="03"
             eyebrow="Journey"
             title="Experience"
             note="The work behind the portfolio, from field sales to Web3 and AI."

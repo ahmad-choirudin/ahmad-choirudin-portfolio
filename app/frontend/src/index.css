@@ -10,6 +10,8 @@
 --muted-rgb: 168 168 168;
 --subtle-rgb: 135 135 135;
 --line-rgb: 255 255 255;
+--danger-rgb: 248 113 113;
+--accent-hi-rgb: 230 255 176;
 
 --bg: rgb(var(--bg-rgb));
 --card: rgb(var(--card-rgb));
@@ -25,6 +27,8 @@ html[data-theme="light"] {
 --muted-rgb: 88 88 88;
 --subtle-rgb: 100 100 100;
 --line-rgb: 10 10 10;
+--danger-rgb: 185 28 28;
+--accent-hi-rgb: 101 163 13;
 color-scheme: light;
 }
 
@@ -172,7 +176,7 @@ transform: none;
 opacity: 1;
 }
 
-[data-reveal="words"] > :not(h2) {
+[data-reveal="words"] > :not(h2):not(.eyebrow-type) {
 opacity: 0;
 transform: translateX(-24px);
 transition: opacity .7s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
@@ -182,7 +186,7 @@ transition: opacity .7s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
 transition-delay: .35s;
 }
 
-[data-reveal="words"].is-in > :not(h2) {
+[data-reveal="words"].is-in > :not(h2):not(.eyebrow-type) {
 opacity: 1;
 transform: none;
 }
@@ -266,10 +270,15 @@ animation-delay: calc(.2s + var(--l, 0) * .13s);
 
 .ln.acc > span {
 color: transparent;
-background: linear-gradient(100deg, var(--accent) 35%, #E6FFB0 50%, var(--accent) 65%) 0 0 / 200% 100%;
+background: linear-gradient(100deg, var(--accent) 35%, rgb(var(--accent-hi-rgb)) 50%, var(--accent) 65%) 0 0 / 200% 100%;
 -webkit-background-clip: text;
 background-clip: text;
 animation: up .9s cubic-bezier(.2,.8,.2,1) forwards, sh 5s linear 1.8s infinite;
 animation-delay: calc(.2s + var(--l, 0) * .13s), 1.8s;
 }
 }
+
+/* Penomoran section otomatis per halaman: <main> mereset counter, tiap .sec-index menambah satu. */
+main { counter-reset: sec; }
+.sec-index { counter-increment: sec; }
+.sec-index::before { content: counter(sec, decimal-leading-zero); }

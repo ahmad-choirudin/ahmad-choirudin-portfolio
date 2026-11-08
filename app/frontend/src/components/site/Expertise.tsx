@@ -9,7 +9,6 @@ export default function Expertise() {
   return (
     <Section id="expertise">
       <SectionHeading
-        index="04"
         eyebrow="Capabilities"
         title="Expertise"
         note="Areas I focus on, with different levels of experience and practice."

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import Section from "@/components/site/Section";
 import LetterRise from "@/components/site/LetterRise";
+import TypewriterText from "@/components/site/TypewriterText";
 import NotFound from "@/pages/NotFound";
 import { projects } from "@/data/projects";
 import { projectMeta, projectPath } from "@/config/seo";
@@ -50,7 +51,7 @@ export default function ProjectDetail() {
       <header className="mt-16 max-w-4xl">
         <p className="flex items-center gap-3 font-mono text-eyebrow uppercase text-accent">
           <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
-          Project case study
+          <TypewriterText text="Project case study" speed={45} />
         </p>
         <h1 className="mt-6 font-display text-display-lg font-semibold tracking-tight text-fg"><LetterRise text={project.title} delay={150} /></h1>
         <div className="mt-9 flex flex-wrap gap-3">

@@ -11,6 +11,7 @@ export default {
         fg: token("fg"),
         muted: token("muted"),
         subtle: token("subtle"),
+        danger: token("danger"),
         line: "rgb(var(--line-rgb) / 0.1)",
       },
       fontFamily: {

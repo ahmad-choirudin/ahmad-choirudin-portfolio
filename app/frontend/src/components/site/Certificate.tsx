@@ -125,7 +125,6 @@ export function Certificate() {
   return (
     <Section id="credentials">
       <SectionHeading
-        index="05"
         eyebrow="Learning & Credentials"
         title="Certificates"
         note="Selected blockchain learning achievements focused on smart contracts, testing, and decentralized application development."

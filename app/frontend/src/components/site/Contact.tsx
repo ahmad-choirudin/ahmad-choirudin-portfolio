@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import Section from "./Section";
 import LetterRise from "./LetterRise";
+import TypewriterText from "./TypewriterText";
 import { site } from "@/data/site";
 
 type Fields = { name: string; email: string; message: string };
@@ -20,7 +21,7 @@ function validate(v: Fields): Errors {
 }
 
 const inputCls =
-  "mt-2 w-full rounded-xl border border-line bg-transparent px-4 py-3 text-base text-fg placeholder:text-subtle focus:border-accent focus:outline-none aria-[invalid=true]:border-red-400";
+  "mt-2 w-full rounded-xl border border-line bg-transparent px-4 py-3 text-base text-fg placeholder:text-subtle focus:border-accent focus:outline-none aria-[invalid=true]:border-danger";
 
 export default function Contact() {
   const [values, setValues] = useState<Fields>({ name: "", email: "", message: "" });
@@ -92,9 +93,9 @@ export default function Contact() {
       <div className="grid gap-12 md:grid-cols-12">
         <div data-reveal className="md:col-span-6">
           <p className="flex items-center gap-3 font-mono text-eyebrow font-medium uppercase text-accent">
-            <span className="tabular-nums text-subtle">08</span>
+            <span className="sec-index tabular-nums text-subtle" aria-hidden="true" />
             <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
-            Get in touch
+            <TypewriterText text="Get in touch" speed={45} />
           </p>
           <h2 className="mt-6 font-display text-display-lg font-semibold text-fg"><LetterRise text="Interested in working together? " accent="Let’s talk." delay={150} /></h2>
         </div>
@@ -104,19 +105,19 @@ export default function Contact() {
             Name
             <input type="text" name="name" autoComplete="name" value={values.name} onChange={set("name")} className={inputCls} {...err("name")} />
           </label>
-          {errors.name && <p id="name-error" role="alert" className="mt-1 text-xs text-red-400">{errors.name}</p>}
+          {errors.name && <p id="name-error" role="alert" className="mt-1 text-xs text-danger">{errors.name}</p>}
 
           <label className="mt-5 block text-sm text-muted">
             Email
             <input type="email" name="email" autoComplete="email" value={values.email} onChange={set("email")} className={inputCls} {...err("email")} />
           </label>
-          {errors.email && <p id="email-error" role="alert" className="mt-1 text-xs text-red-400">{errors.email}</p>}
+          {errors.email && <p id="email-error" role="alert" className="mt-1 text-xs text-danger">{errors.email}</p>}
 
           <label className="mt-5 block text-sm text-muted">
             Message
             <textarea name="message" rows={5} value={values.message} onChange={set("message")} className={inputCls} {...err("message")} />
           </label>
-          {errors.message && <p id="message-error" role="alert" className="mt-1 text-xs text-red-400">{errors.message}</p>}
+          {errors.message && <p id="message-error" role="alert" className="mt-1 text-xs text-danger">{errors.message}</p>}
 
           <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
@@ -128,7 +129,7 @@ export default function Contact() {
             {status === "sending" ? "Sending…" : viaWhatsApp ? "Send via WhatsApp" : "Send message"}
             <span aria-hidden="true" className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
           </button>
-          <p role="status" className={`mt-4 text-sm ${status === "error" ? "text-red-400" : "text-muted"}`}>
+          <p role="status" className={`mt-4 text-sm ${status === "error" ? "text-danger" : "text-muted"}`}>
             {statusText[status]}
           </p>
         </form>
