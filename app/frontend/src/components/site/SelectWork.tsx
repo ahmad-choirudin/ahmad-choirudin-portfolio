@@ -70,7 +70,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         <img src={project.image} alt={`${project.title} project screenshot`} className="aspect-video w-full object-cover" />
         <div className="p-6 md:p-8">
           <p className="font-mono text-eyebrow uppercase text-accent">{project.period}</p>
-          <h3 className="mt-4 font-display text-3xl font-semibold tracking-tight text-fg">{project.title}</h3>
+          <h3 className="mt-4 font-display text-3xl font-semibold tracking-tight text-fg"> <TypewriterText text={project.title} speed={35} /></h3>
           <p className="mt-4 text-base leading-7 text-muted">{project.text}</p>
           <ul className="mt-6 flex flex-wrap gap-2" aria-label="Tools used">
             {toolsOf(project).map((t) => (
@@ -199,7 +199,8 @@ export default function SelectedWork() {
                   <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
                   {project.period}
                 </p>
-                <h3 className="mt-5 font-display text-3xl font-semibold tracking-tight text-fg md:text-4xl">{project.title}</h3>
+                <h3 className="mt-5 font-display text-3xl font-semibold tracking-tight text-fg md:text-4xl">
+                <TypewriterText text={project.title} speed={35} /></h3>
                 <p className="mt-5 line-clamp-4 text-base leading-7 text-muted">{project.text}</p>
                 <ul className="mt-6 flex flex-wrap gap-2" aria-label="Tools used">
                   {toolsOf(project).map((t) => (
