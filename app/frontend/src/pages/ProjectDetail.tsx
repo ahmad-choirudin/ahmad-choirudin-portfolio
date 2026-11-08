@@ -53,8 +53,7 @@ export default function ProjectDetail() {
         </p>
 
         <h1 className="mt-6 font-display text-display-lg font-semibold tracking-tight text-fg">
-          {project.title}
-        </h1>
+        <TypewriterText text={project.title} delay={150} speed={40} /></h1>
 
         <div className="mt-9 flex flex-wrap gap-3">
           {project.demo && (
