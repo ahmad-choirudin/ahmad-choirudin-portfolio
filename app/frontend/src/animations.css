@@ -29,12 +29,14 @@
   pointer-events: none;
   visibility: hidden;
 }
+
 .page-curtain__panel {
   display: block;
   background: rgb(var(--bg-rgb, 8 8 8));
   transform: scaleY(0);
   transform-origin: top;
 }
+
 .page-curtain.is-cover,
 .page-curtain.is-reveal { visibility: visible; }
 .page-curtain.is-cover .page-curtain__panel {
@@ -68,6 +70,12 @@
   font-weight: 600;
   letter-spacing: -.02em;
   line-height: 1;
+  -webkit-text-stroke: 2px #B8F34A;
+  paint-order: stroke fill;
+}
+
+html[data-theme="light"] .page-curtain__name {
+  -webkit-text-stroke-color: #3F6212;
 }
 .page-curtain.is-cover .page-curtain__label {
   animation: curtain-label-in 400ms cubic-bezier(.2, .8, .2, 1) 300ms both;
