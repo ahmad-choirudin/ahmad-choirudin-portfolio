@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import Section from "@/components/site/Section";
+import TypewriterText from "@/components/site/TypewriterText";
 import NotFound from "@/pages/NotFound";
 import { projects } from "@/data/projects";
 import { projectMeta, projectPath } from "@/config/seo";
