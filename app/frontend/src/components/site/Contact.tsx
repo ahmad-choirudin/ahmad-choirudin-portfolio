@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
 import Section from "./Section";
-import ScrambleText from "./ScrambleText";
-import TypewriterText from "./TypewriterText";
+import LetterRise from "./LetterRise";
 import { site } from "@/data/site";
 
 type Fields = { name: string; email: string; message: string };
@@ -95,11 +94,9 @@ export default function Contact() {
           <p className="flex items-center gap-3 font-mono text-eyebrow font-medium uppercase text-accent">
             <span className="tabular-nums text-subtle">08</span>
             <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
-            <ScrambleText text="Get in touch" />
+            Get in touch
           </p>
-          <h2 className="mt-6 font-display text-display-lg font-semibold text-fg">
-          <TypewriterText text="Interested in working together? " accent="Let’s talk." delay={150} speed={40} />
-          </h2>
+          <h2 className="mt-6 font-display text-display-lg font-semibold text-fg"><LetterRise text="Interested in working together? " accent="Let’s talk." delay={150} /></h2>
         </div>
 
         <form data-reveal onSubmit={onSubmit} noValidate className="md:col-span-6">
