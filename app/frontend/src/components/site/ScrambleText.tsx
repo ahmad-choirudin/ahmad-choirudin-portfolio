@@ -12,6 +12,8 @@ type Props = {
   className?: string;
 };
 
+type Frame = { source: string; value: string };
+
 const randomGlyph = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 const isScramblable = (char: string) => /[A-Za-z0-9]/.test(char);
 
@@ -20,10 +22,13 @@ const isScramblable = (char: string) => /[A-Za-z0-9]/.test(char);
 // in a monospace font the layout does not shift while it runs.
 export default function ScrambleText({ text, delay = 0, className }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState(text);
+  const [frame, setFrame] = useState<Frame | null>(null);
+
+  // A frame only counts while it belongs to the current text, so a stale frame
+  // can never show after `text` changes. Without a frame, the real text is shown.
+  const display = frame && frame.source === text ? frame.value : text;
 
   useEffect(() => {
-    setDisplay(text);
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -40,12 +45,13 @@ export default function ScrambleText({ text, delay = 0, className }: Props) {
       const tick = (now: number) => {
         const elapsed = now - start;
         if (elapsed >= end) {
-          setDisplay(text);
+          setFrame(null);
           return;
         }
         if (now - lastFrame >= FRAME_MS) {
           lastFrame = now;
-          setDisplay(chars.map((c, i) => (isScramblable(c) && elapsed < settleAt[i] ? randomGlyph() : c)).join(""));
+          const value = chars.map((c, i) => (isScramblable(c) && elapsed < settleAt[i] ? randomGlyph() : c)).join("");
+          setFrame({ source: text, value });
         }
         raf = requestAnimationFrame(tick);
       };
