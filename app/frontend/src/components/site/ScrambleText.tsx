@@ -1,38 +1,77 @@
 import { useEffect, useRef, useState } from "react";
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#$%&*+<>";
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/_-+*#";
+const FRAME_MS = 45;
+const BASE_MS = 450;
+const STAGGER_MS = 50;
+const JITTER_MS = 120;
 
-export default function ScrambleText({ text, className }: { text: string; className?: string }) {
-  const [out, setOut] = useState(text);
-  const raf = useRef(0);
+type Props = {
+  text: string;
+  delay?: number;
+  className?: string;
+};
 
-  const run = () => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    cancelAnimationFrame(raf.current);
-    const start = performance.now();
-    const step = (now: number) => {
-      const t = Math.min(1, (now - start) / 900);
-      const reveal = Math.floor(t * text.length);
-      setOut(
-        text.split("").map((ch, i) =>
-          ch === " " || i < reveal ? ch : CHARS[Math.floor(Math.random() * CHARS.length)]
-        ).join("")
-      );
-      if (t < 1) raf.current = requestAnimationFrame(step);
-      else setOut(text);
-    };
-    raf.current = requestAnimationFrame(step);
-  };
+const randomGlyph = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+const isScramblable = (char: string) => /[A-Za-z0-9]/.test(char);
+
+// Decodes `text` from random glyphs into the real characters, left to right,
+// the first time it scrolls into view. Spaces and punctuation never change, so
+// in a monospace font the layout does not shift while it runs.
+export default function ScrambleText({ text, delay = 0, className }: Props) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [display, setDisplay] = useState(text);
 
   useEffect(() => {
-    run();
-    return () => cancelAnimationFrame(raf.current);
-  }, [text]);
+    setDisplay(text);
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let raf = 0;
+    let lastFrame = 0;
+
+    const run = () => {
+      const chars = Array.from(text);
+      const settleAt = chars.map((_, i) => delay + BASE_MS + i * STAGGER_MS + Math.random() * JITTER_MS);
+      const end = Math.max(...settleAt);
+      const start = performance.now();
+
+      const tick = (now: number) => {
+        const elapsed = now - start;
+        if (elapsed >= end) {
+          setDisplay(text);
+          return;
+        }
+        if (now - lastFrame >= FRAME_MS) {
+          lastFrame = now;
+          setDisplay(chars.map((c, i) => (isScramblable(c) && elapsed < settleAt[i] ? randomGlyph() : c)).join(""));
+        }
+        raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        run();
+      },
+      { threshold: 0.6 }
+    );
+    io.observe(el);
+
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [text, delay]);
 
   return (
-    <span className={className} onPointerEnter={run}>
+    <span ref={ref} className={className}>
       <span className="sr-only">{text}</span>
-      <span aria-hidden="true">{out}</span>
+      <span aria-hidden="true">{display}</span>
     </span>
   );
 }
