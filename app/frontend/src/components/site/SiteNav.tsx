@@ -8,18 +8,19 @@ import ThemeToggle from "./ThemeToggle";
 import { Container } from "./Section";
 
 export default function SiteNav() {
-  const [open, setOpen] = useState(false);
   const path = usePath();
+  const [openAt, setOpenAt] = useState<string | null>(null);
+  const open = openAt === path;
+  const setOpen = (value: boolean | ((prev: boolean) => boolean)) =>
+    setOpenAt((current) => {
+      const next = typeof value === "function" ? value(current === path) : value;
+      return next ? path : null;
+    });
   const isActive = (to: string) => (to === "/" ? path === "/" : path === to || path.startsWith(`${to}/`));
-
-  // Tutup menu mobile saat rute berubah, termasuk lewat tombol back/forward browser.
-  useEffect(() => {
-    setOpen(false);
-  }, [path]);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenAt(null);
     window.addEventListener("keydown", onKey);
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
