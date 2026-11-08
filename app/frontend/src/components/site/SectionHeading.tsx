@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import ScrambleText from "./ScrambleText";
 
 type Props = {
   index?: string;
@@ -16,10 +17,10 @@ export default function SectionHeading({ index, eyebrow, title, note, className 
       <p className="flex items-center gap-3 font-mono text-eyebrow font-medium uppercase text-accent">
         {index && <span className="tabular-nums text-subtle">{index}</span>}
         <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
-        {eyebrow}
+        <ScrambleText text={eyebrow} delay={150} />
       </p>
 
-      {/* Judul muncul kata per kata dari kiri */}
+      {/* Title reveals word by word from the left */}
       <h2 aria-label={title} className="mt-5 font-display text-display-md font-semibold text-fg">
         {words.map((w, i) => (
           <Fragment key={i}>
