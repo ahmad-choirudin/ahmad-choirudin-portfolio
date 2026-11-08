@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from "react";
 import Section from "./Section";
+import ScrambleText from "./ScrambleText";
+import TypewriterText from "./TypewriterText";
 import { site } from "@/data/site";
 
 type Fields = { name: string; email: string; message: string };
 type Errors = Partial<Record<keyof Fields, string>>;
 type Status = "idle" | "sending" | "sent" | "error";
 
-// Isi VITE_CONTACT_ENDPOINT (mis. https://formspree.io/f/xxxx) agar pesan terkirim langsung.
-// Kosong = fallback ke WhatsApp (jika site.whatsapp diisi) atau aplikasi email.
 const ENDPOINT = (import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined)?.trim() || "";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -37,7 +37,7 @@ export default function Contact() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Honeypot: kolom tersembunyi yang hanya diisi bot.
+    
     const trap = new FormData(e.currentTarget).get("website");
     if (typeof trap === "string" && trap.length) { setStatus("sent"); return; }
 
