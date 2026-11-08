@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/_-+*#";
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const FRAME_MS = 45;
 const BASE_MS = 450;
 const STAGGER_MS = 50;
