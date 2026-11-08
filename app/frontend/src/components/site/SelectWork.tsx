@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Section from "./Section";
 import SectionHeading from "./SectionHeading";
+import TypewriterText from "./TypewriterText";
 import { projects } from "@/data/projects";
 
 type Project = (typeof projects)[number];
