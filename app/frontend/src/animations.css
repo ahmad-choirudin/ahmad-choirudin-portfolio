@@ -168,3 +168,23 @@ body::before {
   }
   [data-tilt]:hover::after { opacity: 1; }
 }
+
+/* Kursor futuristik */
+.fx-dot, .fx-ring {
+  position: fixed; left: 0; top: 0; pointer-events: none; z-index: 9998; opacity: 0;
+  transition: opacity .3s ease, width .25s ease, height .25s ease, margin .25s ease, background .25s ease;
+}
+.fx-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--accent); }
+.fx-ring { width: 32px; height: 32px; margin: -16px 0 0 -16px; border-radius: 50%; border: 1px solid rgb(var(--accent-rgb) / .6); }
+.fx-dot.on, .fx-ring.on { opacity: 1; }
+.fx-ring[data-hover="1"] { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: rgb(var(--accent-rgb) / .08); border-color: var(--accent); }
+@media (pointer: coarse), (prefers-reduced-motion: reduce) { .fx-dot, .fx-ring { display: none; } }
+
+/* Kilau tombol */
+.shine { position: relative; overflow: hidden; }
+.shine::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / .4) 50%, transparent 70%);
+  transform: translateX(-120%);
+}
+.shine:hover::after { transform: translateX(120%); transition: transform .7s ease; }
