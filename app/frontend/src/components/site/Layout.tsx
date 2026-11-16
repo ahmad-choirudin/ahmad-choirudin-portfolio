@@ -10,6 +10,11 @@ import RouteAnnouncer from "./RouteAnnouncer";
 import BootScreen from "./BootScreen";
 import CommandPalette from "./CommandPalette";
 import FuturisticCursor from "./FuturisticCursor";
+import Terminal from "./Terminal";
+import CardSpotlight from "./CardSpotlight";
+import HeroParallax from "./HeroParallax";
+import Konami from "./Konami";
+import SoundFx from "./SoundFx";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const path = usePath();
@@ -25,6 +30,11 @@ export default function Layout({ children }: { children: ReactNode }) {
       </a>
       <RouteAnnouncer />
       <CursorLayer />
+      <CardSpotlight />
+      <HeroParallax />
+      <Konami />
+      <Terminal />
+      <SoundFx />
       <BootScreen />
       <CommandPalette />
       <FuturisticCursor />
