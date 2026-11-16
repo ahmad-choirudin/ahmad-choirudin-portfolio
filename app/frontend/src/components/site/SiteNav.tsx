@@ -52,6 +52,13 @@ export default function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-3">
+        <button
+         type="button"
+         onClick={()} =>window.dispatchEvent("open-palette"))} aria-label="Open command palette"
+         className="hidden item-center gap-2 rounded-full border border-line px-3 py-2 font-mono text-xs text-muted transition-color hover:border-accent hover:text-accent md:flex">
+         search
+        <kbd className="rounded border border-line px-1.5 text-[10px]">Ctrl K</kbd>
+        </button>
           <ThemeToggle />
           <div className="hidden sm:block">
             <Magnetic>
