@@ -7,6 +7,9 @@ import CursorLayer from "./CursorLayer";
 import PageTransition from "./PageTransition";
 import SiteFooter from "./SiteFooter";
 import RouteAnnouncer from "./RouteAnnouncer";
+import BootScreen from "./BootScreen";
+import CommandPalette from "./CommandPalette";
+import FuturisticCursor from "./FuturisticCursor";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const path = usePath();
@@ -22,6 +25,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       </a>
       <RouteAnnouncer />
       <CursorLayer />
+      <BootScreen />
+      <CommandPalette />
+      <FuturisticCursor />
       <PageTransition />
       <SiteNav />
       <main id="main" key={path} tabIndex={-1} className="min-h-[70svh] overflow-x-clip focus:outline-none">
