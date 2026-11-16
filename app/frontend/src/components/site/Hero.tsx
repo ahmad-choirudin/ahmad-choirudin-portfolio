@@ -3,6 +3,8 @@ import { site } from "@/data/site";
 import NetworkBackground from "./NetworkBackground";
 import ParticlePhoto from "./ParticlePhoto";
 import { Container } from "./Section";
+import ScrambleText from "./ScrambleText";
+import LiveHud from "./LiveHud";
 
 const lines = [
   "Building at the",
@@ -63,7 +65,7 @@ export default function Hero() {
         <div className="hero-in relative max-w-3xl">
           <p className="flex items-center gap-3 font-mono text-eyebrow uppercase text-muted">
             <span className="h-px w-8 bg-accent/60" aria-hidden="true" />
-            {site.role}
+            <ScrambleText text={site.role} />
           </p>
 
           <h1
@@ -96,7 +98,7 @@ export default function Hero() {
               Explore My Work
               <span
                 aria-hidden="true"
-                className="transition-transform group-hover:translate-x-1"
+                className="shine transition-transform group-hover:translate-x-1"
               >
                 →
               </span>
@@ -117,6 +119,7 @@ export default function Hero() {
             </span>
             Open to remote opportunities
           </p>
+          <LiveHud />
         </div>
       </Container>
     </section>
