@@ -5,6 +5,7 @@ import ParticlePhoto from "./ParticlePhoto";
 import { Container } from "./Section";
 import ScrambleText from "./ScrambleText";
 import LiveHud from "./LiveHud";
+import RoleTyper from "./RoleTyper";
 
 const lines = [
   "Building at the",
@@ -90,6 +91,11 @@ export default function Hero() {
             research, evaluation, community support, and hands-on projects.
           </p>
 
+          <p className="mt-6 font-mono text-sm text-accent md:text-base">
+          <span className="text-subtle">&gt; </span>
+          <RoleTyper />
+          </p>
+          
           <div className="mt-10 flex flex-wrap gap-3">
             <a
               href="/work"
