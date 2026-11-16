@@ -17,6 +17,8 @@ export default function CommandPalette() {
       ...site.nav.map((n) => ({ id: `n${n.to}`, group: "Page", label: n.label, hint: n.to, run: () => navigate(n.to) })),
       ...projects.map((p) => ({ id: `p${p.slug}`, group: "Project", label: p.title, hint: p.category, run: () => navigate(`/work/${p.slug}`) })),
       { id: "mail", group: "Action", label: "Copy email", hint: site.email, run: () => navigator.clipboard?.writeText(site.email) },
+      { id: "term", group: "Action", label: "Open terminal", hint: "`", run: () => window.dispatchEvent(new Event("open-terminal")) },
+      { id: "matrix", group: "Action", label: "Matrix mode", hint: "easter egg", run: () => window.dispatchEvent(new Event("matrix")) },
       ...site.socials.map((s) => ({ id: `s${s.label}`, group: "Social", label: s.label, hint: s.handle, run: () => window.open(s.href, "_blank", "noopener,noreferrer") })),
     ],
     [navigate]
